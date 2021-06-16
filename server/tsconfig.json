@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": ["dom", "es2019", "esnext.asynciterable"],
+    "outDir": "build",
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "inlineSourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "declaration": false,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"]
+}
