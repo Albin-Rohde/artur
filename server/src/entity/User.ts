@@ -14,9 +14,4 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: '255' })
   user_password: string;
 
-  @Column({ type: 'varchar', length: '255' })
-  signed_in: string;
-
-  @Column({ type: 'bool', default: false })
-  verifyed: boolean;
 }
