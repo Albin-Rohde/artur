@@ -1,16 +1,11 @@
 <script>
-	import CustomButton from "./components/CustomButton.svelte";
-	let count = 0;
+import RegisterForm from "./components/RegisterForm.svelte";
 
-	function doWhenClick() {
-		count = count + 1;
-	}
+function doOnClick(){
 
-	function dontClick() {
-		count = count - 1;
-	}
+}
 
-	let arrayOfImages = ['url1', 'ulr2', 'albin', 'dessi']
+
 
 
 	//username
@@ -20,12 +15,15 @@
 </script>
 
 <main>
-	<h1>Clicked {count} many times!</h1>
-	<CustomButton doWhenClicked={doWhenClick} text="klicka på mig"/>
-	<CustomButton doWhenClicked={dontClick} text="klicka mig inte"/>
-	{#each arrayOfImages as imageUrl}
-		<p>{imageUrl}</p>
-	{/each}
+
+<h1> Welcome to Artur! </h1>
+<form>
+<RegisterForm></RegisterForm>
+</form>
+
+
+
+
 </main>
 
 <style>
@@ -43,6 +41,7 @@
 		font-weight: 100;
 	}
 
+		
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
