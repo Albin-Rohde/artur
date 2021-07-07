@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgres://root:abc123@db:5432/db_1
+    depends_on:
+      - db
+    volumes:
+      - ./server:/server
+    links:
+      - db
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: abc123
+      POSTGRES_DB: db_1

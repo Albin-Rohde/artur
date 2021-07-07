@@ -1,5 +1,5 @@
 */node_modules
-
+/pg_data
 *.crt
 *.pem
 *.key

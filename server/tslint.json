@@ -1,0 +1,8 @@
+{
+    "extends": "@advinans/tslint-config",
+    "rules": {
+        "no-console": false,
+        "variable-name": false
+    }
+  }
+  
