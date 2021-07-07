@@ -3,12 +3,13 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('posts')
 export class Post extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  post_id: string;
+  id: string;
 
   @Column({ type: 'varchar', length: '255', default: null })
   color: string;
+
   @Column({ name: 'photo_url', type: 'varchar', length: '255' })
-  photo_url: string;
+  photoUrl: string;
 
   @Column({ name: 'description', type: 'varchar', length: '255' })
   description: string;
