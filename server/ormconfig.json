@@ -1,10 +1,6 @@
 {
   "type": "postgres",
-  "host": "localhost",
-  "port":  5432,
-  "username": "albin",
-  "password": "dessi",
-  "database": "olivvver",
+  "url": "postgres://root:abc123@db:5432/db_1",
   "synchronize": true,
   "logging": false,
   "entities": ["src/entity/**/*.ts"],
