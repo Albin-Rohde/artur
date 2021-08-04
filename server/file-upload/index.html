@@ -8,18 +8,23 @@
   </head>
   <body>
     <input type="file" name="" id="file" />
+    <input type="text" name="" id="idk" />
   </body>
   <script>
     const myFile = document.querySelector("#file");
+    const idk = document.querySelector("#idk");
 
-    myFile.addEventListener("change", (e) => {
+    myFile.addEventListener("change", async (e) => {
       const file = e.target.files[0];
       console.log(file);
       const reader = new FormData();
       reader.append("image", file)
-      const res = await (await fetch("http://localhost:5000/auth/post",{
+      reader.append('text', idk.addEventListener('change', (e) => {
+        e.preventDefault()
+        return e.target.value
+      }))
+      const res = await (await fetch("http://localhost:5000/post/upload",{
         method: "post",
-        headers: {"content-type": "multipart/form-data"},
         body: reader
       })).json()
     })

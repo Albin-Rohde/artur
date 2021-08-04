@@ -5,3 +5,4 @@
 *.key
 *.secret
 yarn-error.log
+/server/post/*
