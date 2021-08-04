@@ -15,18 +15,13 @@
     myFile.addEventListener("change", (e) => {
       const file = e.target.files[0];
       console.log(file);
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async function () {
-        console.log(reader.result);
-        const res = await ( await fetch('http://localhost:5000/auth/post', {
-            method: 'post',
-            headers: {'content-type':'application/json'},
-            body: JSON.stringify({
-                url: reader.result
-            })
-        })).json()
-      };
-    });
+      const reader = new FormData();
+      reader.append("image", file)
+      const res = await (await fetch("http://localhost:5000/auth/post",{
+        method: "post",
+        headers: {"content-type": "multipart/form-data"},
+        body: reader
+      })).json()
+    })
   </script>
 </html>
