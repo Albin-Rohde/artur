@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Router } from 'express';
+import fs from 'fs';
 import * as yup from 'yup';
 import { User } from '../entity/User';
 
@@ -47,7 +48,6 @@ authRouter.post('/register', async (req, res) => {
       User.findOne({ email: user_email }),
       User.findOne({ name: user_name }),
     ]);
-
 
     if (userByEmail || userByName) {
       return res.json('This username or email is taken');
@@ -106,6 +106,19 @@ authRouter.post('/logout', async (req, res) => {
   console.log(req.session);
   req.session.userID = undefined;
   return res.sendStatus(200);
+});
+
+authRouter.post('/post', async (req, res) => {
+  const { url } = req.body;
+
+  const base64Data = url.replace(/^data:image\/[png | jpg | jpeg];base64,/, '');
+
+  fs.writeFile('img.jpg', base64Data, { encoding: 'base64' }, err => {
+    if (err) {
+      console.log(err);
+    }
+    console.log('success');
+  });
 });
 
 export default authRouter;
