@@ -7,7 +7,7 @@
 
 <input type="text" placeholder="email" bind:value={email}><br>
 <input type="password" placeholder="password" bind:value={password}><br>
-<button>Login</button>
+
 
 
 <style>

@@ -1,27 +1,54 @@
+<script>
+
+import App from "../App.svelte";
+
+</script>
 <div class='navbar'>
-  <div class="login">
-    <button class="login-btn">Log in</button>
-  </div>
+  <img src='assets/avatar.png' alt="*_*" class="avatar">
+  <img src='assets/text.png' alt="*_*" class="text">
+  <img src='assets/hamburger.png' alt="*_*" class="hamburger">
 </div>
 <div class='line'></div>
 
 
 <style>
+  img{
+    margin: 0px;
+    padding: 0px;
+
+  }
   .navbar {
     display: grid;
-    background-color: rgb(42, 42, 42);
+    align-items: center;
+    background-color: #add5a9;
     grid-template-columns: 15% 70% 15%;
-    height: 7vh;
+    height: 8vh;
   }
-  .login {
+  .avatar {
+    display: flex;
+    grid-column: 1;
+    float: left;
+    margin-left: 20%;
+    height: 4vh;
+    width: 3vh;
+
+  }
+  .text{
+    justify-self: center;
+    grid-column: 2;
+    height: 70%;
+    width: 40%;
+
+  }
+  .hamburger {
+    display: flex;
     grid-column: 3;
     float: right;
-    text-align: right;
-    margin-right: 10%;
+    margin-left: 60%;
+    height: 5vh;
+    width: 5vh;
   }
-  .login-btn {
-    margin-top: 7%;
-  }
+
   .line {
     height: 0.1vh;
     background-color: rgb(77, 77, 77);
