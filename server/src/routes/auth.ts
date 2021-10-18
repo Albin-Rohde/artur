@@ -48,7 +48,6 @@ authRouter.post('/register', async (req, res) => {
       User.findOne({ name: user_name }),
     ]);
 
-
     if (userByEmail || userByName) {
       return res.json('This username or email is taken');
     } else {

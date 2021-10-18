@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" name="" id="file" />
+    <input type="text" name="" id="idk" />
+  </body>
+  <script>
+    const myFile = document.querySelector("#file");
+    const idk = document.querySelector("#idk");
+
+    myFile.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      console.log(file);
+      const reader = new FormData();
+      reader.append("image", file)
+      reader.append('text', idk.addEventListener('change', (e) => {
+        e.preventDefault()
+        return e.target.value
+      }))
+      const res = await (await fetch("http://localhost:5000/post/upload",{
+        method: "post",
+        body: reader
+      })).json()
+    })
+  </script>
+</html>
