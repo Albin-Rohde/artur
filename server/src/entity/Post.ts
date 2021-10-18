@@ -25,7 +25,7 @@ export class Post extends BaseEntity {
     length: '255',
     nullable: true,
   })
-  createdAt: string;
+  createdAt: number;
 
   // @Column({ type: 'int', default: 0 })
   // likes: number;

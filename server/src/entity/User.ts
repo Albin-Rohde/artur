@@ -13,4 +13,7 @@ export class User extends BaseEntity {
 
   @Column({ name: 'user_password', type: 'varchar', length: '255' })
   password: string;
+
+  @Column({ name: 'followers', type: 'varchar', array: true, nullable: true })
+  followers: string[];
 }

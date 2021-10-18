@@ -26,6 +26,7 @@ const storage = multer.diskStorage({
     // const id = req.query.id;
     const date = Date.now();
     const inserts = await Post.create({
+      createdAt: date,
       photoUrl: `${req.protocol}://${
         req.hostname
       }:5000/post/${date}${path.extname(file.originalname)}`,
