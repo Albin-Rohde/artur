@@ -8,26 +8,26 @@
 
 
 function doWhenClicked(){
-
-let userdata = [username, email, password, passwordConfirm]
-console.log(userdata)
-
+    let userdata = [username, email, password, passwordConfirm]
+    console.log(userdata);
  }
 </script>
 
-<label> Username </label>
-<input type="text" id="myText" value={username} placeholder="Username"><br>
+<form>
+    <label> Username </label>
+    <input type="text" id="myText" bind:value={username} placeholder="Username"><br>
 
-<label> Email Address </label>
-<input type="text" id="myText" value={email} placeholder="Email"><br>
+    <label> Email Address </label>
+    <input type="text" id="myText" bind:value={email} placeholder="Email"><br>
 
-<label> Password </label>
-<input type="text" id="myText" value={password} placeholder="Password"><br>
+    <label> Password </label>
+    <input type="text" id="myText" bind:value={password} placeholder="Password"><br>
 
-<label> Confirm </label>
-<input type="text" id="myText" value={passwordConfirm} placeholder="Confirm Password"><br>
+    <label> Confirm </label>
+    <input type="text" id="myText" bind:value={passwordConfirm} placeholder="Confirm Password"><br>
+    <button type="button" on:click={doWhenClicked} >Sign Up</button>
+</form>
 
-<button onclick={doWhenClicked()}>Sign Up</button>
 
 <style>
 
