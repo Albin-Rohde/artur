@@ -52,7 +52,7 @@ const server = async () => {
       });
       const port = process.env.PORT || 5000;
       app.listen(port, () =>
-        console.log(`App is up and running on http://localhost:${port}`)
+        console.log(`App is up and running on http://localhost:${port}`),
       );
     })
     .catch(error => console.log('TypeORM connection error: ', error));

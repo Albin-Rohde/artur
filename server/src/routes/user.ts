@@ -14,4 +14,18 @@ userRouter.get('/', async (req, res) => {
   return res.json(user);
 });
 
+userRouter.post('/bio', async (req, res) => {
+  try {
+    const bio = req.body;
+    // TODO: when session is working, remove this hardcoded uuid
+    const user = await User.findOneOrFail('d550f55b-fc58-4a48-a980-1068cc84fbe4');
+    user.bio = bio.text;
+    await user.save();
+    res.status(201).json('OK');
+  } catch (e) {
+    console.error(e);
+    res.status(500).json(e.message);
+  }
+});
+
 export default userRouter;
