@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Post } from './Post';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -16,4 +23,19 @@ export class User extends BaseEntity {
 
   @Column({ name: 'user_bio', type: 'varchar', length: '255', nullable: true })
   bio: string;
+
+  @Column({ name: 'followers', type: 'varchar', array: true, nullable: true })
+  followers: string[];
+
+  @OneToMany(
+    type => Post,
+    post => post.user,
+    {
+      cascade: true,
+      lazy: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }
+  )
+  posts: Promise<Post[]>;
 }

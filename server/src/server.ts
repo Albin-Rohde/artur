@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import authRouter from './routes/auth';
+import { feedRouter } from './routes/feed';
 import postRouter from './routes/posts';
 import userRouter from './routes/user';
 
@@ -44,6 +45,7 @@ const server = async () => {
       app.use('/auth', authRouter);
       app.use('/user', userRouter);
       app.use('/post', postRouter);
+      app.use('/feed', feedRouter);
       app.get('/', (req, res) => {
         console.log(req.session);
         return res.json({
@@ -52,7 +54,7 @@ const server = async () => {
       });
       const port = process.env.PORT || 5000;
       app.listen(port, () =>
-        console.log(`App is up and running on http://localhost:${port}`),
+        console.log(`App is up and running on http://localhost:${port}`)
       );
     })
     .catch(error => console.log('TypeORM connection error: ', error));

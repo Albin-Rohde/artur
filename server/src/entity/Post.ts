@@ -1,5 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './User';
 @Entity('posts')
 export class Post extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -26,6 +33,16 @@ export class Post extends BaseEntity {
     nullable: true,
   })
   createdAt: string;
+
+  @ManyToOne(
+    type => User,
+    user => user.posts,
+    {
+      lazy: true,
+    }
+  )
+  @JoinColumn({ name: 'user_id_fk' })
+  user: Promise<User>;
 
   // @Column({ type: 'int', default: 0 })
   // likes: number;
