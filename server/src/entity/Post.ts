@@ -47,7 +47,6 @@ export class Post extends BaseEntity {
   // @Column({ type: 'int', default: 0 })
   // likes: number;
 
-  // NÄr marcus är klar med ai är de bara att ta bort komentaren under, så kan vi sortera efter färg
-  //   @Column({ type: 'varchar', length: '255', default: null })
-  //   color: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  color: string;
 }

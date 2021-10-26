@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import * as yup from 'yup';
+import { predict } from '../color-predictor';
 import { mediaTypes } from '../constants/MediaTypes';
 import { Post } from '../entity/Post';
 
@@ -61,13 +62,22 @@ router.post('/create/:id', async (req, res) => {
       },
       { abortEarly: false }
     );
-    console.log(req.body);
 
-    await Post.update(
-      { id },
-      { title: post_title, description: post_description }
-    );
+    const post = await Post.findOne(id);
+    const color = await predict(post?.photoUrl as string);
+    console.log(color);
 
+    if (['red', 'green', 'blue'].includes(color)) {
+      await Post.update(
+        { id },
+        { title: post_title, description: post_description, color }
+      );
+    } else {
+      await Post.update(
+        { id },
+        { title: post_title, description: post_description }
+      );
+    }
     return res.json('OK');
   } catch (error) {
     if (error instanceof yup.ValidationError) {
