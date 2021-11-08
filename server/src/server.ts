@@ -32,7 +32,7 @@ const server = async () => {
       app.use(
         session({
           name: 'sid',
-          secret: process.env.salvador_dali as string,
+          secret: process.env.COOKIE_SECRET as string,
           resave: false,
           saveUninitialized: false,
           cookie: {
