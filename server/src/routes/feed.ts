@@ -10,4 +10,4 @@ router.get('/', async (req, res) => {
   res.json(posts);
 });
 
-export { router as feedRouter };
+export default router;

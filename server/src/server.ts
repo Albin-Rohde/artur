@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import authRouter from './routes/auth';
-import { feedRouter } from './routes/feed';
+import feedRouter from './routes/feed';
 import postRouter from './routes/posts';
 import userRouter from './routes/user';
 
@@ -25,7 +25,7 @@ const server = async () => {
       app.use(
         express.json({
           limit: '500mb',
-        })
+        }),
       );
       app.use(cors());
       app.use(morgan('dev'));
@@ -40,7 +40,7 @@ const server = async () => {
             httpOnly: false,
             sameSite: false,
           },
-        })
+        }),
       );
       app.use('/auth', authRouter);
       app.use('/user', userRouter);
