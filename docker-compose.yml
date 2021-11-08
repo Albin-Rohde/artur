@@ -1,5 +1,19 @@
 version: "3.8"
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+      - db
+    volumes:
+    - ./frontend:/frontend
+    links:
+      - server
+
   server:
     build:
       context: ./server
