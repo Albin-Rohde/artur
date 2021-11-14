@@ -42,25 +42,26 @@ userRouter.post('/follower/:id', async (req, res) => {
       return res.json('not a valid uuid');
     }
 
-    const [isUser, isNotTheOnlyOne]: [User[], User[] | []] = await Promise.all([
-      User.find(follower_id),
-      (User.query('select * from users where $1 = ANY(followers)', [
-        follower_id,
-      ]) as unknown) as User[] | [],
-    ]);
+    // const [isUser, isNotTheOnlyOne]: [User[], User[] | []] = await Promise.all([
+    //   User.find(follower_id),
+    //   (User.query('select * from users where $1 = ANY(followers)', [
+    //     follower_id,
+    //   ]) as unknown) as User[] | [],
+    // ]);
 
-    if (!isUser || isNotTheOnlyOne.length > 0) {
-      return res.json('already added or not a valid user');
-    } else {
-      const user2 = await User.query(
-        'UPDATE users SET followers = ARRAY_APPEND(followers, $1) WHERE id = $2 RETURNING *',
-        [follower_id, id]
-      );
-      console.log(user2);
-      return res.json(user2);
-    }
+    // if (!isUser || isNotTheOnlyOne.length > 0) {
+    //   return res.json('already added or not a valid user');
+    // } else {
+    const user2 = await User.query(
+      'UPDATE users SET followers = ARRAY_APPEND(followers, $1) WHERE id = $2 RETURNING *',
+      [follower_id, id]
+    );
+    console.log(user2);
+    return res.json(user2);
+    // }
   } catch (error) {
     console.log(error);
+    return res.json('something went wrong').status(500);
   }
 });
 

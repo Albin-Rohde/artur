@@ -34,6 +34,14 @@ export class Post extends BaseEntity {
   })
   createdAt: string;
 
+  @Column({
+    name: 'owner_id',
+    type: 'varchar',
+    length: '255',
+    nullable: true,
+  })
+  ownerId: string;
+
   @ManyToOne(
     type => User,
     user => user.posts,

@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { predict } from '../color-predictor';
 import { mediaTypes } from '../constants/MediaTypes';
 import { Post } from '../entity/Post';
+import { checkSession } from '../middleware/session';
 
 const router = Router();
 
@@ -30,6 +31,7 @@ const storage = multer.diskStorage({
       photoUrl: `${req.protocol}://${
         req.hostname
       }:5000/post/${date}${path.extname(file.originalname)}`,
+      ownerId: req.params.id,
     }).save();
     console.log(inserts);
     req.res?.json(inserts.id);
@@ -51,7 +53,7 @@ const filter = (
 
 const uplad = multer({ storage, fileFilter: filter });
 
-router.post('/create/:id', async (req, res) => {
+router.post('/create/:id', checkSession, async (req, res) => {
   try {
     const id = req.params.id;
     const { post_description, post_title } = req.body;
@@ -88,9 +90,9 @@ router.post('/create/:id', async (req, res) => {
   }
 });
 
-router.post('/upload', uplad.single('image'));
+router.post('/upload/:id', checkSession, uplad.single('image'));
 
-router.get('/:id', (req, res) => {
+router.get('/:id', checkSession, (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));

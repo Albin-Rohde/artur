@@ -1,20 +1,10 @@
 import Jimp from 'jimp';
-import yup from 'yup';
-
-const schema = yup.object().shape({
-  url: yup
-    .string()
-    .required()
-    .url(),
-});
 
 const calcAvg = (arr: number[]) =>
   arr.reduce((acc, num) => acc + num, 0) / (arr.length - 1);
 
 const predict = async (url: string): Promise<string> => {
   try {
-    schema.validateSync({ url }, { abortEarly: false });
-
     let color = '';
     const red: number[] = [];
     const green: number[] = [];
@@ -52,9 +42,6 @@ const predict = async (url: string): Promise<string> => {
     }
     return color;
   } catch (error) {
-    if (error instanceof yup.ValidationError) {
-      return error.message;
-    }
     return 'something went wrong';
   }
 };
