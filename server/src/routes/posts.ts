@@ -25,13 +25,14 @@ const storage = multer.diskStorage({
     cb(null, 'post');
   },
   filename: async (req, file, cb) => {
+    const id = req.session.userID;
     // const id = req.query.id;
     const date = Date.now();
     const inserts = await Post.create({
       photoUrl: `${req.protocol}://${
         req.hostname
       }:5000/post/${date}${path.extname(file.originalname)}`,
-      ownerId: req.params.id,
+      ownerId: id,
     }).save();
     console.log(inserts);
     req.res?.json(inserts.id);
@@ -55,7 +56,7 @@ const uplad = multer({ storage, fileFilter: filter });
 
 router.post('/create/:id', checkSession, async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const { post_description, post_title } = req.body;
     postShcema.validateSync(
       {
@@ -69,7 +70,7 @@ router.post('/create/:id', checkSession, async (req, res) => {
     const color = await predict(post?.photoUrl as string);
     console.log(color);
 
-    if (['red', 'green', 'blue'].includes(color)) {
+    if (!(color === 'something went wrong')) {
       await Post.update(
         { id },
         { title: post_title, description: post_description, color }
@@ -90,9 +91,9 @@ router.post('/create/:id', checkSession, async (req, res) => {
   }
 });
 
-router.post('/upload/:id', checkSession, uplad.single('image'));
+router.post('/upload', checkSession, uplad.single('image'));
 
-router.get('/:id', checkSession, (req, res) => {
+router.get('/:id', (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));

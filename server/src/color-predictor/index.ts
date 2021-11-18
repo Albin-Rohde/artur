@@ -31,17 +31,23 @@ const predict = async (url: string): Promise<string> => {
       calcAvg(blue),
     ]);
 
+    console.log(redavg, greeenavg, blueavg);
+
     if (redavg > greeenavg && redavg > blueavg) {
-      color = 'red';
+      color = '1';
     } else if (greeenavg > redavg && greeenavg > blueavg) {
-      color = 'green';
+      color = '2';
     } else if (blueavg > redavg && blueavg > greeenavg) {
-      color = 'blue';
+      color = '3';
+    } else if (blueavg === redavg && blueavg === greeenavg) {
+      color = (Math.floor(Math.random() * 3) + 1).toString();
     } else {
       throw Error('something went wrong');
     }
+    console.log(color);
     return color;
   } catch (error) {
+    console.log(error);
     return 'something went wrong';
   }
 };
