@@ -26,17 +26,22 @@ const storage = multer.diskStorage({
   },
   filename: async (req, file, cb) => {
     const id = req.session.userID;
+    if (!id) {
+      throw new Error('No user id');
+    } else {
+      const date = Date.now();
+      const inserts = await Post.create({
+        photoUrl: `${req.protocol}://${
+          req.hostname
+        }:5000/post/${date}${path.extname(file.originalname)}`,
+        createdAt: date.toString(),
+        ownerId: id,
+      }).save();
+      console.log(inserts);
+      req.res?.json(inserts.id);
+      cb(null, date + path.extname(file.originalname));
+    }
     // const id = req.query.id;
-    const date = Date.now();
-    const inserts = await Post.create({
-      photoUrl: `${req.protocol}://${
-        req.hostname
-      }:5000/post/${date}${path.extname(file.originalname)}`,
-      ownerId: id,
-    }).save();
-    console.log(inserts);
-    req.res?.json(inserts.id);
-    cb(null, date + path.extname(file.originalname));
   },
 });
 
@@ -92,6 +97,50 @@ router.post('/create/:id', checkSession, async (req, res) => {
 });
 
 router.post('/upload', checkSession, uplad.single('image'));
+
+router.post('/like', checkSession, async (req, res) => {
+  const id = req.session.userID;
+  try {
+    const { postId } = req.body;
+    const post = await Post.findOneOrFail(postId);
+
+    if (!post) {
+      return res.status(404).json('Post not found');
+    }
+
+    const post2 = await Post.query(
+      'UPDATE users SET likes = ARRAY_APPEND(followers, $1) WHERE id = $2 RETURNING *',
+      [id, postId]
+    );
+
+    if (!post2) {
+      return res.status(404).json('unable to like');
+    }
+    return res.json(post2);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json('unable to like');
+  }
+});
+
+router.get('likes', checkSession, async (req, res) => {
+  const id = req.session.userID;
+  try {
+    const post = await Post.findOneOrFail(id);
+    if (!post) {
+      return res.status(404).json('Post not found');
+    }
+
+    if (!post.likes || post.likes.length === 0 || post.likes.length < 0) {
+      return res.json('no likes');
+    }
+
+    return res.json(post.likes.length);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json('unable to like');
+  }
+});
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;

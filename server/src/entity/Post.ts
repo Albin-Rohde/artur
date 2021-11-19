@@ -52,9 +52,9 @@ export class Post extends BaseEntity {
   @JoinColumn({ name: 'user_id_fk' })
   user: Promise<User>;
 
-  // @Column({ type: 'int', default: 0 })
-  // likes: number;
-
   @Column({ type: 'varchar', length: 255, nullable: true })
   color: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true, array: true })
+  likes: string[];
 }

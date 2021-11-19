@@ -40,7 +40,7 @@ authRouter.post('/register', async (req, res) => {
         userEmail: user_email,
         userPassword: user_password,
       },
-      { abortEarly: false },
+      { abortEarly: false }
     );
 
     const [userByEmail, userByName] = await Promise.all([
@@ -53,7 +53,7 @@ authRouter.post('/register', async (req, res) => {
     } else {
       const hashedPw = await bcrypt.hash(
         user_password,
-        Math.floor(Math.random() * 5) + 10,
+        Math.floor(Math.random() * 5) + 10
       );
       const newUser = await User.create({
         name: user_name,
@@ -61,7 +61,6 @@ authRouter.post('/register', async (req, res) => {
         password: hashedPw,
       }).save();
       req.session.userID = newUser.id;
-      console.log(req.session);
       return res.sendStatus(200);
     }
   } catch (error) {
@@ -80,7 +79,7 @@ authRouter.post('/login', async (req, res) => {
         userEmail: user_email,
         userPassword: user_password,
       },
-      { abortEarly: false },
+      { abortEarly: false }
     );
 
     const user = await User.findOneOrFail({ email: user_email });
@@ -102,7 +101,6 @@ authRouter.post('/login', async (req, res) => {
 });
 
 authRouter.post('/logout', async (req, res) => {
-  console.log(req.session);
   req.session.userID = undefined;
   return res.sendStatus(200);
 });
