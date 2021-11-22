@@ -1,9 +1,11 @@
 <script>
   import Button from "../../components/Button.svelte";
+  export let setScreen;
 
   let username = "";
   let email = "";
   let password = "";
+  
 </script>
 
 <div class="site-container">
@@ -28,12 +30,10 @@
       placeholder="password"
       bind:value={password}
     /><br />
-    <Button text="Create Account" />
-
-    {username}<br />
-    {email}<br />
-    {password}
-  </div>
+    <Button text="Create Account"></Button>
+    <br>
+    <p > Already have an account?  <a class="link" on:click={()=> setScreen('Login')}>Log in</a></p>
+    </div>
 </div>
 
 <style>
@@ -43,15 +43,19 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(24, 1fr);
     grid-auto-rows: 50px;
+    justify-content: center;
   }
   .register-container {
-    grid-column: 5/9;
+    grid-column: 10/18;
     grid-row: 6/10;
   }
 
   .input-style {
-    width: 100%;
+    width: 80%;
+  }
+  .link{
+    cursor: pointer;
   }
 </style>
