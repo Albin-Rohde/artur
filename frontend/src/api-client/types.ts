@@ -27,3 +27,5 @@ export interface IPostRequest {
   post_title?: string;
   file?: File;
 }
+
+export type PostSortString = "color" | "likes" | "follower" | "time";

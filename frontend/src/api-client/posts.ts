@@ -1,12 +1,12 @@
 import { Client } from "./client";
-import { IPost, IPostRequest } from "./types";
+import { IPost, IPostRequest, PostSortString } from "./types";
 
 export class Post extends Client {
   constructor() {
     super();
   }
 
-  public async Upload(post: IPostRequest): Promise<string> {
+  public async upload(post: IPostRequest): Promise<string> {
     const formData = new FormData();
     formData.append("image", post.file);
     const id = await this.makeRequestWithFormData<string>({
@@ -26,7 +26,7 @@ export class Post extends Client {
     });
   }
 
-  public async getFeed(query: string): Promise<IPost[]> {
+  public async getFeed(query: PostSortString): Promise<IPost[]> {
     return await this.makeRequest<IPost[]>({
       route: "feed",
       method: "get",
