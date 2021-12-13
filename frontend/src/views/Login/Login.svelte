@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+    import Button from "../../components/Button.svelte";
+   export let setScreen;
   let email = "";
   let password = "";
 </script>
@@ -20,7 +22,9 @@
       placeholder="password"
       bind:value={password}
     /><br />
-    <p>I have an account, sign in</p>
+    <Button text="Log In"></Button>
+    <br>
+    <p>Don't have an account? <a class="link" on:click={()=> setScreen('Register')}>Register</a></p>
   </div>
 </div>
 
@@ -41,5 +45,8 @@
 
   .input-style {
     width: 100%;
+  }
+  .link{
+    cursor: pointer;
   }
 </style>
