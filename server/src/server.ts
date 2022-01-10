@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import authRouter from './routes/auth';
-import feedRouter from './routes/feed';
+import { feedRouter } from './routes/feed';
 import postRouter from './routes/posts';
 import userRouter from './routes/user';
 
@@ -46,7 +46,7 @@ const server = async () => {
       );
       app.use('/auth', authRouter);
       app.use('/user', userRouter);
-      app.use('/post', postRouter);
+      app.use('/posts', postRouter);
       app.use('/feed', feedRouter);
       app.get('/', (req, res) => {
         console.log(req.session);

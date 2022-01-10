@@ -27,20 +27,28 @@ export class Client {
     console.log(method, route, data, action, query);
     try {
       action = action ? `/${action}` : "";
-      query = query === undefined ? "" : `?${query}`;
+      query = query === undefined ? "" : `/?type=${query}`;
       console.log(`${this.baseUrl}/${route}${action}${query}`);
       console.log("base url", this.baseUrl);
-      const res = await fetch(`${this.baseUrl}/${route}${action}${query}`, {
-        method,
-        headers: {
-          "Content-Type":
-            type === "json" ? "application/json" : "multipart/form-data",
-          "Access-Control-Allow-Origin": this.baseUrl,
-        },
-        body:
-           type === "json" ? JSON.stringify(data) : (data as FormData),
-        credentials: "include",
-      });
+      let res;
+      if (type === "json") {
+        res = await fetch(`${this.baseUrl}/${route}${action}${query}`, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": this.baseUrl,
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        });
+      } else if (type === "formData") {
+        res = await fetch(`${this.baseUrl}/${route}${action}${query}`, {
+          method,
+          body: data as FormData,
+          credentials: "include",
+        });
+      }
+      console.log("res", res);
       const resBody = await res.json();
       if (!resBody) {
         throw new InternalServerError("No data in response");

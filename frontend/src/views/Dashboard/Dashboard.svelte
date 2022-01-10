@@ -6,6 +6,9 @@
 
 export let currentUser: IUser;
 export let onLogout: () => Promise<void>
+    let post_description: string;
+    let post_title: string;
+    let file: FileList;
 
 const post = new Post();
 
@@ -20,12 +23,28 @@ const post = new Post();
 window.onload = async () => {
 }
 
+const upload = async () => {
+    console.log(post_description, post_title, file[0]);
+    const p =  await post.upload({
+        post_description,
+        post_title,
+        file: file[0]
+    })
+    console.log(p)
+}
+
 </script>
 
 <div class="feedContainer">
     <div class="feed">
         <h1>Dethär är din dashboard.</h1>
         <h2> Hej {currentUser.name}.</h2>
+        <form action="">
+            <input type="text" name="title" bind:value={post_title} placeholder="Title">
+            <input type="text" name="content" bind:value={post_description} placeholder="Content">
+            <input type="file" name="file" bind:files={file}   >
+            <Button onClick={() => upload()} text="Create Post"  />
+        </form>
         <Button onClick={onLogout} text="Logout"/>
     </div>
 </div>

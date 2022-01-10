@@ -4,6 +4,8 @@ import path from 'path';
 import * as yup from 'yup';
 import { mediaTypes } from '../constants/MediaTypes';
 import { Post } from '../entity/Post';
+import { checkSession } from '../middleware/session';
+import { predict } from '../util/color-predictor';
 
 const router = Router();
 
@@ -23,16 +25,23 @@ const storage = multer.diskStorage({
     cb(null, 'post');
   },
   filename: async (req, file, cb) => {
+    const id = req.session.userID;
+    if (!id) {
+      throw new Error('No user id');
+    } else {
+      const date = Date.now();
+      const inserts = await Post.create({
+        photoUrl: `${req.protocol}://${
+          req.hostname
+        }:666/posts/${date}${path.extname(file.originalname)}`,
+        createdAt: date.toString(),
+        ownerId: id,
+      }).save();
+      console.log(inserts);
+      req.res?.json(inserts.id);
+      cb(null, date + path.extname(file.originalname));
+    }
     // const id = req.query.id;
-    const date = Date.now();
-    const inserts = await Post.create({
-      photoUrl: `${req.protocol}://${
-        req.hostname
-      }:5000/post/${date}${path.extname(file.originalname)}`,
-    }).save();
-    console.log(inserts);
-    req.res?.json(inserts.id);
-    cb(null, date + path.extname(file.originalname));
   },
 });
 
@@ -48,11 +57,11 @@ const filter = (
   }
 };
 
-const uplad = multer({ storage, fileFilter: filter });
+const upload = multer({ storage, fileFilter: filter });
 
-router.post('/create/:id', async (req, res) => {
+router.post('/create/:id', checkSession, async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const { post_description, post_title } = req.body;
     postShcema.validateSync(
       {
@@ -61,13 +70,22 @@ router.post('/create/:id', async (req, res) => {
       },
       { abortEarly: false }
     );
-    console.log(req.body);
 
-    await Post.update(
-      { id },
-      { title: post_title, description: post_description }
-    );
+    const post = await Post.findOne(id);
+    const color = await predict(post?.photoUrl as string);
+    console.log(color);
 
+    if (!(color === 'something went wrong')) {
+      await Post.update(
+        { id },
+        { title: post_title, description: post_description, color }
+      );
+    } else {
+      await Post.update(
+        { id },
+        { title: post_title, description: post_description }
+      );
+    }
     return res.json('OK');
   } catch (error) {
     if (error instanceof yup.ValidationError) {
@@ -78,11 +96,56 @@ router.post('/create/:id', async (req, res) => {
   }
 });
 
-router.post('/upload', uplad.single('image'));
+router.post('/upload', checkSession, upload.single('image'));
+
+router.post('/like', checkSession, async (req, res) => {
+  const id = req.session.userID;
+  try {
+    const { postId } = req.body;
+    const post = await Post.findOneOrFail(postId);
+
+    if (!post) {
+      return res.status(404).json('Post not found');
+    }
+
+    const post2 = await Post.query(
+      'UPDATE users SET likes = ARRAY_APPEND(followers, $1) WHERE id = $2 RETURNING *',
+      [id, postId]
+    );
+
+    if (!post2) {
+      return res.status(404).json('unable to like');
+    }
+    return res.json(post2);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json('unable to like');
+  }
+});
+
+router.get('likes', checkSession, async (req, res) => {
+  const id = req.session.userID;
+  try {
+    const post = await Post.findOneOrFail(id);
+    if (!post) {
+      return res.status(404).json('Post not found');
+    }
+
+    if (!post.likes || post.likes.length === 0 || post.likes.length < 0) {
+      return res.json('no likes');
+    }
+
+    return res.json(post.likes.length);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json('unable to like');
+  }
+});
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));
 });
+
 export default router;

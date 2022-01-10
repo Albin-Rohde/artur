@@ -9,20 +9,23 @@ export class Post extends Client {
   public async upload(post: IPostRequest): Promise<string> {
     const formData = new FormData();
     formData.append("image", post.file);
+    console.log("formData", formData);
     const id = await this.makeRequest<string>({
       route: "posts",
       method: "post",
       data: formData,
       action: "upload",
+      type: "formData",
     });
     return await this.makeRequest<string>({
       route: "posts",
-      method: "get",
+      method: "post",
       data: {
         post_description: post.post_description,
         post_title: post.post_title,
       },
       action: `create/${id}`,
+      type: "json",
     });
   }
 
