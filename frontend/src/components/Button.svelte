@@ -1,10 +1,10 @@
 <script>
     export let text = '';
-
+    export let onClick;
 </script>
 
  
-<button class='knapp'>{text}</button>
+<button class='knapp' on:click|preventDefault={onClick} >{text}</button>
 
 
 

@@ -1,32 +1,32 @@
 import { Client } from "./client";
-import { IUser, IUserRequest } from "./types";
+import type { IUser, IUserRequest } from "./types";
 
 export class User extends Client {
+  public user: IUser;
+
   constructor() {
     super();
   }
-  public async register(data: IUserRequest): Promise<IUser> {
-    return await this.makeRequest<IUser>({
+  public async register(data: IUserRequest): Promise<void> {
+    console.log("data", data);
+    this.user = await this.makeRequest<IUser>({
       route: "auth",
       method: "post",
+      action: "register",
       data: {
         name: data.name,
         email: data.email,
         password: data.password,
       },
-      action: "register",
     });
   }
-  public async login(data: IUserRequest): Promise<IUser> {
-    return await this.makeRequest<IUser>({
+  public async login(data: IUserRequest): Promise<void> {
+    console.log("data", data);
+    this.user = await this.makeRequest<IUser>({
       route: "auth",
       method: "post",
-      data: {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      },
       action: "login",
+      data,
     });
   }
 
@@ -38,7 +38,7 @@ export class User extends Client {
     });
   }
 
-  public async addFollower(you:string,id: string): Promise<void> {
+  public async addFollower(you: string, id: string): Promise<void> {
     return await this.makeRequest<void>({
       route: "user",
       method: "post",
@@ -52,9 +52,8 @@ export class User extends Client {
   // TODO: please fix this in backend
   // public async bio
 
-
-  public async getSession(): Promise<IUser> {
-    return await this.makeRequest<IUser>({
+  public async getSession(): Promise<void> {
+    this.user = await this.makeRequest<IUser>({
       route: "user",
       method: "get",
     });

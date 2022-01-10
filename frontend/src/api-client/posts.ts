@@ -1,5 +1,5 @@
 import { Client } from "./client";
-import { IPost, IPostRequest, PostSortString } from "./types";
+import type { IPost, IPostRequest, PostSortString } from "./types";
 
 export class Post extends Client {
   constructor() {

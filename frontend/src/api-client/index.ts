@@ -1,7 +1,20 @@
-import {Post} from './posts'
-import {User} from './user'
-import {IPost, IPostRequest, IUser, IUserRequest} from './types'
+import {
+  AuthenticationError,
+  ExpectedError,
+  InternalServerError,
+} from "./errors";
+import { Post } from "./posts";
+import type { IPost, IPostRequest, IUser, IUserRequest } from "./types";
+import { User } from "./user";
 
-
-export {Post, User, IPost, IPostRequest, IUser, IUserRequest}
-
+export {
+  Post,
+  User,
+  IPost,
+  IPostRequest,
+  IUser,
+  IUserRequest,
+  ExpectedError,
+  AuthenticationError,
+  InternalServerError,
+};

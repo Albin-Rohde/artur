@@ -1,6 +1,8 @@
 <script lang="ts">
-    import Button from "../../components/Button.svelte";
+import type { IUserRequest } from "../../api-client";
+import Button from "../../components/Button.svelte";
    export let setScreen;
+   export let onLogin: (u: IUserRequest) => void;
   let email = "";
   let password = "";
 </script>
@@ -22,9 +24,12 @@
       placeholder="password"
       bind:value={password}
     /><br />
-    <Button text="Log In"></Button>
+    <Button text="Log In" onClick={() => onLogin({
+      email,
+      password
+    })} ></Button>
     <br>
-    <p>Don't have an account? <a class="link" on:click={()=> setScreen('Register')}>Register</a></p>
+    <div>Don't have an account? <div class="link" on:click={()=> setScreen('Register')}>Register</div> </div>
   </div>
 </div>
 
