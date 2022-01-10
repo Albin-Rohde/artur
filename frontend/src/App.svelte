@@ -1,54 +1,84 @@
 <script lang="ts">
-  import type { IUserRequest } from './api-client';
+  import type { IUser,IUserRequest } from './api-client';
   import { User } from './api-client';
   import Navbar from "./components/Navbar.svelte";
+  import Dashboard from './views/Dashboard/Dashboard.svelte';
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
 
   type ScreenType = 'Register' | 'Login' | 'Dashboard'
-
+  
   let screen ="Register";
-
+  
   const user = new User();
+  
+  let currentUser: IUser = null;
+
+  const getSession = async () => {
+    try {
+      currentUser = await user.getSession()
+      if (currentUser) {
+        setScreen('Dashboard');
+      }
+    } catch (err) {
+      // do some erorr display,
+      currentUser = null;
+    }
+  }
+
+  window.onload = () => getSession();
+  const setScreen = (scream: ScreenType) => {
+    screen = scream
+  } 
+
 
   const register = async (detail: IUserRequest) => {
     try {
-      await user.register(detail);
+      console.log('register with data: ', detail)
+      const data = await fetch('http://localhost:666').then(d => d.json());
+      console.log(data);
+      currentUser = await user.register(detail);
+      console.log('currentUser: ', currentUser)
+      setScreen('Dashboard');
     } catch (error) {
       console.log(error);
     }
   }
 
-  const login = async (detail: IUserRequest) => {
+  const login = async (detail: IUserRequest): Promise<void> => {
     try {
-      console.log(await (await fetch('http://localhost:5000/')).json())
-      await user.login(detail);
-      console.log(user.user)
+      console.log(await (await fetch('http://localhost:666/')).json())
+      currentUser = await user.login(detail);
+      setScreen('Dashboard');
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const logout = async (): Promise<void> => {
+    try {
+      await user.logout();
+      currentUser = null;
+      setScreen("Login");
+    } catch (err) {
+      console.log(err);
     }
   }
 
   console.log(screen)
-
-  const setScreen = (scream: ScreenType) => {
-    screen = scream
-  } 
 
 </script>
 
 <main>
   <Navbar />
   {#if screen === "Register"}
-  <Register setScreen={setScreen} onRegister={register}/>
-  {:else}
-    {#if screen === "Login"}
-      <Login  setScreen={setScreen} onLogin={login}/>
-    {:else}
+    <Register setScreen={setScreen} onRegister={register}/>
+  {:else if screen === "Login"}
+    <Login  setScreen={setScreen} onLogin={login}/>
+  {:else if screen === "Dashboard" && currentUser}
+    <Dashboard currentUser={currentUser} onLogout={logout}/>
   {/if}
-  
-  {/if}
-  
+
 </main>
 
 <style>

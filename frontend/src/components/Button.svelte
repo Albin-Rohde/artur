@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
     export let text = '';
-    export let onClick;
+    export let onClick: (...a: any) => any;
 </script>
 
  

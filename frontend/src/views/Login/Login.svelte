@@ -2,7 +2,7 @@
 import type { IUserRequest } from "../../api-client";
 import Button from "../../components/Button.svelte";
    export let setScreen;
-   export let onLogin: (u: IUserRequest) => void;
+   export let onLogin: (u: IUserRequest) => Promise<void>;
   let email = "";
   let password = "";
 </script>

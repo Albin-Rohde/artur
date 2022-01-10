@@ -9,7 +9,7 @@ export class Post extends Client {
   public async upload(post: IPostRequest): Promise<string> {
     const formData = new FormData();
     formData.append("image", post.file);
-    const id = await this.makeRequestWithFormData<string>({
+    const id = await this.makeRequest<string>({
       route: "posts",
       method: "post",
       data: formData,

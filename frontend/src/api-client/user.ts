@@ -7,7 +7,7 @@ export class User extends Client {
   constructor() {
     super();
   }
-  public async register(data: IUserRequest): Promise<void> {
+  public async register(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
     this.user = await this.makeRequest<IUser>({
       route: "auth",
@@ -19,8 +19,9 @@ export class User extends Client {
         password: data.password,
       },
     });
+    return this.user
   }
-  public async login(data: IUserRequest): Promise<void> {
+  public async login(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
     this.user = await this.makeRequest<IUser>({
       route: "auth",
@@ -28,6 +29,7 @@ export class User extends Client {
       action: "login",
       data,
     });
+    return this.user
   }
 
   public async logout(): Promise<void> {
@@ -52,10 +54,11 @@ export class User extends Client {
   // TODO: please fix this in backend
   // public async bio
 
-  public async getSession(): Promise<void> {
+  public async getSession(): Promise<IUser> {
     this.user = await this.makeRequest<IUser>({
       route: "user",
       method: "get",
     });
+    return this.user;
   }
 }

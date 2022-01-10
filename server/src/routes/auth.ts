@@ -66,7 +66,7 @@ authRouter.post('/register', async (req, res) => {
     }
   } catch (error) {
     if (error instanceof yup.ValidationError) {
-      return res.json(error.errors).status(400);
+      return res.status(400).json(error.errors);
     }
     return res.status(500);
   }
@@ -95,7 +95,7 @@ authRouter.post('/login', async (req, res) => {
     }
   } catch (error) {
     if (error instanceof yup.ValidationError) {
-      return res.json(error.errors).status(400);
+      return res.status(400).json(error.errors)
     }
     return res.status(500);
   }
@@ -103,8 +103,9 @@ authRouter.post('/login', async (req, res) => {
 
 authRouter.post('/logout', async (req, res) => {
   console.log(req.session);
-  req.session.userID = undefined;
-  return res.sendStatus(200);
+  if (req.session) {
+    req.session.destroy(() => res.json("ok"));
+  }
 });
 
 export default authRouter;

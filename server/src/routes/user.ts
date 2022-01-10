@@ -5,11 +5,11 @@ const userRouter = Router();
 
 userRouter.get('/', async (req, res) => {
   if (!req.session.userID) {
-    return res.json('not authenticated');
+    return res.status(401).json('not authenticated');
   }
   const user = await User.findOne(req.session.userID);
   if (!user) {
-    return res.json('not authenticated');
+    return res.status(401).json('not authenticated');
   }
   return res.json(user);
 });
