@@ -76,7 +76,7 @@ import App from "../App.svelte";
   }
 
   .line {
-    height: 0.1vh;
-    background-color: rgb(77, 77, 77);
+    height: 0.3vh;
+    background-color: #a2c6c5;
   }
 </style>
