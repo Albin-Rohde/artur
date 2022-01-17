@@ -2,6 +2,7 @@ FROM node:14
 
 WORKDIR /server
 
-RUN yarn
+RUN npm i --force
 
-CMD yarn start
+
+CMD npm run start

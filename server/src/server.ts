@@ -54,7 +54,7 @@ const server = async () => {
           message: 'IT WORKS 🚀 hi soma',
         });
       });
-      const port = process.env.PORT || 666;
+      const port = process.env.SERVER_PORT || 666;
       app.listen(port, () =>
         console.log(`App is up and running on http://localhost:${port}`)
       );
