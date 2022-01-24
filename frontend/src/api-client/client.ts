@@ -14,7 +14,7 @@ interface RestRequestOptions {
 }
 
 export class Client {
-  private readonly baseUrl: string = "http://localhost:666";
+  private readonly baseUrl: string = process["env"]["SERVER_URL"];
 
   public async makeRequest<T>({
     method,
@@ -24,6 +24,8 @@ export class Client {
     query,
     type = "json",
   }: RestRequestOptions): Promise<T> {
+    console.log(process);
+    console.log(this.baseUrl);
     console.log(method, route, data, action, query);
     try {
       action = action ? `/${action}` : "";
@@ -36,7 +38,7 @@ export class Client {
           method,
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": this.baseUrl,
+            "Access-Control-Allow-Origin": `${process["env"]["FRONT_URL"]}${process["env"]["FRONT_PORT"]}`,
           },
           body: JSON.stringify(data),
           credentials: "include",
@@ -44,6 +46,9 @@ export class Client {
       } else if (type === "formData") {
         res = await fetch(`${this.baseUrl}/${route}${action}${query}`, {
           method,
+          headers: {
+            "Access-Control-Allow-Origin": `${process["env"]["FRONT_URL"]}${process["env"]["FRONT_PORT"]}`,
+          },
           body: data as FormData,
           credentials: "include",
         });

@@ -1,17 +1,22 @@
-import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
+import { config } from 'dotenv';
+import css from 'rollup-plugin-css-only';
 import livereload from 'rollup-plugin-livereload';
+import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
-import typescript from '@rollup/plugin-typescript';
-import css from 'rollup-plugin-css-only';
+
+config()
 
 const production = !process.env.ROLLUP_WATCH;
 
-function serve() {
-	let server;
 
+function serve(port) {
+	let server;
+	
 	function toExit() {
 		if (server) server.kill(0);
 	}
@@ -19,7 +24,7 @@ function serve() {
 	return {
 		writeBundle() {
 			if (server) return;
-			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev', '--host 0.0.0.0', '--port 3000'], {
+			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev', '--host 0.0.0.0', `--port ${port}`], {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});
@@ -64,10 +69,23 @@ export default {
 			sourceMap: !production,
 			inlineSources: !production
 		}),
+		replace({
+			preventAssignment: true,
+			process: JSON.stringify({
+				hello: 'world',
+				SERVER_URL: 'hello',
+				FRONT_URL: 'hello',
+				env: {
+					SERVER_URL: process.env.SERVER_URL,
+					FRONT_PORT: process.env.FRONT_PORT,
+					// FRONT_URL: Process.env.FRONT_URL,
+				}
+			}),
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
-		!production && serve(),
+		!production && serve(process.env.FRONT_PORT),
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production

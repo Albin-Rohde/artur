@@ -19,7 +19,7 @@ export class User extends Client {
         password: data.password,
       },
     });
-    return this.user
+    return this.user;
   }
   public async login(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
@@ -29,7 +29,7 @@ export class User extends Client {
       action: "login",
       data,
     });
-    return this.user
+    return this.user;
   }
 
   public async logout(): Promise<void> {
@@ -47,7 +47,7 @@ export class User extends Client {
       data: {
         follower_id: id,
       },
-      action: `follower/${you}`,
+      action: `follower/`,
     });
   }
 

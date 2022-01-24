@@ -6,6 +6,8 @@
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
 
+  console.log(process);
+
   type ScreenType = 'Register' | 'Login' | 'Dashboard'
   
   let screen ="Register";
@@ -35,8 +37,6 @@
   const register = async (detail: IUserRequest) => {
     try {
       console.log('register with data: ', detail)
-      const data = await fetch('http://localhost:666').then(d => d.json());
-      console.log(data);
       currentUser = await user.register(detail);
       console.log('currentUser: ', currentUser)
       setScreen('Dashboard');
@@ -47,7 +47,6 @@
 
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
-      console.log(await (await fetch('http://localhost:666/')).json())
       currentUser = await user.login(detail);
       setScreen('Dashboard');
     } catch (error) {
