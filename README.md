@@ -16,7 +16,7 @@
   from server root
    
 3. Install frontend dependencies go to frontend root 
-   (`cd frontend`) and run `npm i`
+   (`cd ../frontend`) and run `npm i`
 4. Start the app by running `docker-compose up`, in root of project.
 
 
