@@ -1,5 +1,6 @@
 import { Client } from "./client";
 import type { IPost, IPostRequest, PostSortString } from "./types";
+import {InternalServerError} from './errors'
 
 export class Post extends Client {
   constructor() {
@@ -17,6 +18,11 @@ export class Post extends Client {
       action: "upload",
       type: "formData",
     });
+
+    if(!id) {
+      throw new InternalServerError("No id in response")
+    }
+
     return await this.makeRequest<string>({
       route: "posts",
       method: "post",

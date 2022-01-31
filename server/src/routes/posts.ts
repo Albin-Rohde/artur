@@ -4,7 +4,6 @@ import path from 'path';
 import * as yup from 'yup';
 import { mediaTypes } from '../constants/MediaTypes';
 import { Post } from '../entity/Post';
-import { checkSession } from '../middleware/session';
 import { predict } from '../util/color-predictor';
 
 const router = Router();
@@ -31,9 +30,9 @@ const storage = multer.diskStorage({
     } else {
       const date = Date.now();
       const inserts = await Post.create({
-        photoUrl: `${req.protocol}://${
-          req.hostname
-        }:666/posts/${date}${path.extname(file.originalname)}`,
+        photoUrl: `${req.protocol}://${req.hostname}:${
+          process.env.SERVER_PORT
+        }/posts/${date}${path.extname(file.originalname)}`,
         createdAt: date.toString(),
         ownerId: id,
       }).save();
@@ -59,9 +58,11 @@ const filter = (
 
 const upload = multer({ storage, fileFilter: filter });
 
-router.post('/create/:id', checkSession, async (req, res) => {
+router.post('/create/:id', async (req, res) => {
   try {
+    const { userID } = req.session;
     const { id } = req.params;
+    console.log(userID, id);
     const { post_description, post_title } = req.body;
     postShcema.validateSync(
       {
@@ -72,6 +73,11 @@ router.post('/create/:id', checkSession, async (req, res) => {
     );
 
     const post = await Post.findOne(id);
+
+    if (post?.ownerId !== userID) {
+      throw new Error('Not your post');
+    }
+
     const color = await predict(post?.photoUrl as string);
     console.log(color);
 
@@ -92,13 +98,13 @@ router.post('/create/:id', checkSession, async (req, res) => {
       return res.json(error.errors).status(400);
     }
     console.log(error);
-    // return res.status(500);
+    return res.status(500).json(error);
   }
 });
 
-router.post('/upload', checkSession, upload.single('image'));
+router.post('/upload', upload.single('image'));
 
-router.post('/like', checkSession, async (req, res) => {
+router.post('/like', async (req, res) => {
   const id = req.session.userID;
   try {
     const { postId } = req.body;
@@ -123,7 +129,7 @@ router.post('/like', checkSession, async (req, res) => {
   }
 });
 
-router.get('likes', checkSession, async (req, res) => {
+router.get('likes', async (req, res) => {
   const id = req.session.userID;
   try {
     const post = await Post.findOneOrFail(id);

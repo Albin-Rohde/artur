@@ -36,7 +36,7 @@ services:
   db:
     image: postgres
     ports:
-      - "${PG_PORT}:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     env_file:

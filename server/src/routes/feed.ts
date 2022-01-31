@@ -1,22 +1,31 @@
-import { Router } from 'express';
+import { Request, Router } from 'express';
+import * as yup from 'yup';
 import { Post } from '../entity/Post';
 import { User } from '../entity/User';
-import { checkSession } from '../middleware/session';
+
+const typeSchema = yup.object().shape({
+  type: yup
+    .string()
+    .oneOf(['follower', 'color', 'likes', 'relevance', 'time'], 'Invalid type')
+    .required(),
+});
 
 const router = Router();
 
-router.get('/', checkSession, async (req, res) => {
-  const id = req.session.userID;
-  const { type } = req.query;
+interface Query {
+  type?: string;
+}
 
-  try {
-    if (
-      !['follower', 'color', 'likes', 'relevance', 'time'].includes(
-        type as string
-      )
-    ) {
-      return res.status(400).json('Invalid type');
-    } else {
+router.get(
+  '/',
+  async (req: Request<{}, {}, {}, Query, Record<any, any>>, res) => {
+    const id = req.session.userID;
+    console.log(id);
+    const { type } = req.query;
+
+    try {
+      typeSchema.validateSync({ type }, { abortEarly: false });
+
       const user = await User.findOneOrFail(id);
       const posts: Post[] = [];
 
@@ -85,14 +94,17 @@ router.get('/', checkSession, async (req, res) => {
       }
 
       return res.json({ posts, msg: 'success' });
+    } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        return res.json(error.errors).status(400);
+      }
+      console.log(error);
+      return res.json(error as any).status(400);
     }
-  } catch (error) {
-    console.log(error);
-    return res.json(error).status(400);
   }
-});
+);
 
-router.get('/my', checkSession, async (req, res) => {
+router.get('/my', async (req: Request<{}, {}, Query>, res) => {
   const id = req.session.userID;
   const { type } = req.query;
   try {
@@ -101,43 +113,41 @@ router.get('/my', checkSession, async (req, res) => {
     if (!post) {
       return res.status(404).json('Post not found');
     }
-    if (
-      !['follower', 'color', 'likes', 'relevance', 'time'].includes(
-        type as string
-      )
-    ) {
-      return res.status(400).json('Invalid type');
-    } else {
-      switch (type) {
-        case 'color':
-          post.sort((p1, p2) => Number(p1.color) - Number(p2.color));
-          post.map(post => {
-            if (post.color) {
-              posts.push(post);
-            }
-          });
-          break;
 
-        case 'likes':
-          post.sort(
-            (p1, p2) => Number(p2.likes.length) - Number(p1.likes.length)
-          );
-          post.map(p => {
-            if (p.likes.length) {
-              posts.push(p);
-            }
-          });
-          break;
+    typeSchema.validateSync({ type }, { abortEarly: false });
 
-        case 'time':
-          post.sort((p1, p2) => Number(p2.createdAt) - Number(p1.createdAt));
-          posts.push(...post);
-          break;
-      }
+    switch (type) {
+      case 'color':
+        post.sort((p1, p2) => Number(p1.color) - Number(p2.color));
+        post.map(post => {
+          if (post.color) {
+            posts.push(post);
+          }
+        });
+        break;
 
-      return res.json({ posts, msg: 'success' });
+      case 'likes':
+        post.sort(
+          (p1, p2) => Number(p2.likes.length) - Number(p1.likes.length)
+        );
+        post.map(p => {
+          if (p.likes.length) {
+            posts.push(p);
+          }
+        });
+        break;
+
+      case 'time':
+        post.sort((p1, p2) => Number(p2.createdAt) - Number(p1.createdAt));
+        posts.push(...post);
+        break;
     }
+
+    return res.json({ posts, msg: 'success' });
   } catch (error) {
+    if (error instanceof yup.ValidationError) {
+      return res.json(error.errors).status(400);
+    }
     console.error(error);
     return res.status(500).json('not able to get your feed');
   }

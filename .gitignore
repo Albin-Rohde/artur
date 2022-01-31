@@ -6,4 +6,4 @@
 *.secret
 yarn-error.log
 /server/post/*
-/.env
+.env

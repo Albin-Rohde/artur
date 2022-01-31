@@ -31,9 +31,9 @@ userRouter.post('/bio', async (req, res) => {
   }
 });
 
-userRouter.post('/follower/:id', async (req, res) => {
+userRouter.post('/follower/', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userID } = req.session;
     const { follower_id } = req.body;
     const regex = /[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}/;
 
@@ -54,7 +54,7 @@ userRouter.post('/follower/:id', async (req, res) => {
     } else {
       const user2 = await User.query(
         'UPDATE users SET followers = ARRAY_APPEND(followers, $1) WHERE id = $2 RETURNING *',
-        [follower_id, id]
+        [follower_id, userID]
       );
       console.log(user2);
       return res.json(user2);
