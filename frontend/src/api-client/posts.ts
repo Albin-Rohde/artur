@@ -2,6 +2,11 @@ import { Client } from "./client";
 import type { IPost, IPostRequest, PostSortString } from "./types";
 import {InternalServerError} from './errors'
 
+type PostResponse = {
+  msg: string
+  posts: IPost[]
+}
+
 export class Post extends Client {
   constructor() {
     super();
@@ -36,10 +41,10 @@ export class Post extends Client {
   }
 
   public async getFeed(query: PostSortString): Promise<IPost[]> {
-    return await this.makeRequest<IPost[]>({
+    return await this.makeRequest<PostResponse>({
       route: "feed",
       method: "get",
       query,
-    });
+    }).then(r => r.posts);
   }
 }

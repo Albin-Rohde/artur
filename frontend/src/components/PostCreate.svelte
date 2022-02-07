@@ -27,9 +27,8 @@ const upload = async () => {
         file: file[0]
     })
     console.log(p)
+	window.location.replace("/");
 }
-
-
 
 
 let topDiv

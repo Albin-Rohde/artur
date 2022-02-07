@@ -1,9 +1,10 @@
 <script lang="ts">
-    import type { IUser } from "../../api-client";
+    import type { IPost, IUser } from "../../api-client";
     import { Post } from '../../api-client';
     import PlusButton from "../../components/PlusButton.svelte";
     import Button from "../../components/Button.svelte";
     import PostCreate from "../../components/PostCreate.svelte";
+import App from "../../App.svelte";
     export let currentUser: IUser;
     export let onLogout: () => Promise<void>
     console.log(currentUser);
@@ -12,6 +13,8 @@
     let post_description: string;
     let post_title: string;
     let file: FileList;
+    let posts: IPost[] = [];
+
     const showPostCreate = ()=>{
         postCreation =  "Visible"
         document.body.style.position = 'fixed';
@@ -22,15 +25,12 @@
         document.body.style.position = '';
         document.body.style.top = '';
     }
-// (async ()=> {
-//     console.log("hello")
-//     const posts = await post.getFeed('color')
-//     console.log(posts)
-
-// })()
-
-window.onload = async () => {
-}
+ (async ()=> {
+    console.log("hello")
+    const postClient = new Post();
+    posts = await postClient.getFeed('time')
+    console.log(posts);
+ })()
 
 
 </script>
@@ -49,48 +49,11 @@ window.onload = async () => {
    
 <div class="feedContainer">
     <div class="feed">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-
+        {#if posts.length > 0}
+            {#each posts as post}
+                <div style="background-image: url({post.photoUrl});background-size: auto; background-repeat: no-repeat;"></div>
+            {/each}
+        {/if}
     </div>
 </div>
 
@@ -112,7 +75,7 @@ window.onload = async () => {
 .feed div{
     width: 100%;
     height: 200px;
-    background-color: #d6a7bd;    
+    /*background-color: #d6a7bd;*/
 }
 
 </style>
