@@ -55,6 +55,7 @@ import App from "../../App.svelte";
             {/each}
         {/if}
     </div>
+    <!--<input type="text" name="search" bind:value={search} on:input={() => {searchUser()}}  WIP: -->
 </div>
 
 <style>

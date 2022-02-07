@@ -9,26 +9,31 @@ const registerSchema = yup.object().shape({
   userName: yup
     .string()
     .min(4)
-    .max(25),
+    .max(25)
+    .required(),
   userEmail: yup
     .string()
     .email()
-    .max(255),
+    .max(255)
+    .required(),
   userPassword: yup
     .string()
     .min(6)
-    .max(255),
+    .max(255)
+    .required(),
 });
 
 const loginSchema = yup.object().shape({
   userEmail: yup
     .string()
     .email()
-    .max(255),
+    .max(255)
+    .required(),
   userPassword: yup
     .string()
     .min(6)
-    .max(255),
+    .max(255)
+    .required(),
 });
 
 authRouter.post('/register', async (req, res) => {
@@ -83,9 +88,9 @@ authRouter.post('/login', async (req, res) => {
       { abortEarly: false }
     );
 
-    const user = await User.findOneOrFail({ email: email });
+    const user = await User.findOne({ email: email });
     if (!user) {
-      return res.json('user does not exist');
+      return res.json('user does not exist').status(401);
     }
     if (await bcrypt.compare(password, user.password)) {
       req.session.userID = user.id;
@@ -95,7 +100,7 @@ authRouter.post('/login', async (req, res) => {
     }
   } catch (error) {
     if (error instanceof yup.ValidationError) {
-      return res.status(400).json(error.errors)
+      return res.status(400).json(error.errors);
     }
     return res.status(500);
   }
@@ -104,7 +109,7 @@ authRouter.post('/login', async (req, res) => {
 authRouter.post('/logout', async (req, res) => {
   console.log(req.session);
   if (req.session) {
-    req.session.destroy(() => res.json("ok"));
+    req.session.destroy(() => res.json('ok'));
   }
 });
 
