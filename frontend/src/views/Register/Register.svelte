@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
+  import type { IUserRequest } from '../../api-client';
   import Button from "../../components/Button.svelte";
   export let setScreen;
+  export let onRegister: (u: IUserRequest) => void
 
   let username = "";
   let email = "";
@@ -30,7 +32,7 @@
       placeholder="password"
       bind:value={password}
     /><br />
-    <Button text="Create Account"></Button>
+    <Button text="Create Account" onClick={() => onRegister({name: username, email, password})} ></Button>
     <br>
     <p > Already have an account?  <a class="link" on:click={()=> setScreen('Login')}>Log in</a></p>
     </div>

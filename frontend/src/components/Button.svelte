@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
     export let text = '';
-
+    export let onClick: (...a: any) => any;
 </script>
 
  
-<button class='knapp'>{text}</button>
+<button class='knapp' on:click|preventDefault={onClick} >{text}</button>
 
 
 

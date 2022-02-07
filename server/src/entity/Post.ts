@@ -34,6 +34,14 @@ export class Post extends BaseEntity {
   })
   createdAt: string;
 
+  @Column({
+    name: 'owner_id',
+    type: 'varchar',
+    length: '255',
+    nullable: true,
+  })
+  ownerId: string;
+
   @ManyToOne(
     type => User,
     user => user.posts,
@@ -44,10 +52,9 @@ export class Post extends BaseEntity {
   @JoinColumn({ name: 'user_id_fk' })
   user: Promise<User>;
 
-  // @Column({ type: 'int', default: 0 })
-  // likes: number;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  color: string;
 
-  // NÄr marcus är klar med ai är de bara att ta bort komentaren under, så kan vi sortera efter färg
-  //   @Column({ type: 'varchar', length: '255', default: null })
-  //   color: string;
+  @Column({ type: 'varchar', length: 255, nullable: true, array: true })
+  likes: string[];
 }

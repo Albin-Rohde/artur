@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import authRouter from './routes/auth';
-import feedRouter from './routes/feed';
+import { feedRouter } from './routes/feed';
 import postRouter from './routes/posts';
 import userRouter from './routes/user';
 
@@ -15,6 +15,7 @@ dotenv.config();
 declare module 'express-session' {
   interface SessionData {
     userID: string | undefined;
+    destroy: (...args: any) => any;
   }
 }
 
@@ -25,9 +26,10 @@ const server = async () => {
       app.use(
         express.json({
           limit: '500mb',
-        }),
+        })
       );
-      app.use(cors());
+      app.disable('X-Powered-By');
+      app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
       app.use(morgan('dev'));
       app.use(
         session({
@@ -40,11 +42,11 @@ const server = async () => {
             httpOnly: false,
             sameSite: false,
           },
-        }),
+        })
       );
       app.use('/auth', authRouter);
       app.use('/user', userRouter);
-      app.use('/post', postRouter);
+      app.use('/posts', postRouter);
       app.use('/feed', feedRouter);
       app.get('/', (req, res) => {
         console.log(req.session);
@@ -52,7 +54,7 @@ const server = async () => {
           message: 'IT WORKS 🚀 hi soma',
         });
       });
-      const port = process.env.PORT || 5000;
+      const port = process.env.SERVER_PORT || 666;
       app.listen(port, () =>
         console.log(`App is up and running on http://localhost:${port}`)
       );

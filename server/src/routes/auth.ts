@@ -33,40 +33,40 @@ const loginSchema = yup.object().shape({
 
 authRouter.post('/register', async (req, res) => {
   try {
-    const { user_name, user_email, user_password } = req.body;
+    const { name, email, password } = req.body;
     registerSchema.validateSync(
       {
-        userName: user_name,
-        userEmail: user_email,
-        userPassword: user_password,
+        userName: name,
+        userEmail: email,
+        userPassword: password,
       },
-      { abortEarly: false },
+      { abortEarly: false }
     );
 
     const [userByEmail, userByName] = await Promise.all([
-      User.findOne({ email: user_email }),
-      User.findOne({ name: user_name }),
+      User.findOne({ email: email }),
+      User.findOne({ name: name }),
     ]);
 
     if (userByEmail || userByName) {
-      return res.json('This username or email is taken');
+      return res.json('This username or email is taken').status(300);
     } else {
       const hashedPw = await bcrypt.hash(
-        user_password,
-        Math.floor(Math.random() * 5) + 10,
+        password,
+        Math.floor(Math.random() * 5) + 10
       );
       const newUser = await User.create({
-        name: user_name,
-        email: user_email,
+        name: name,
+        email: email,
         password: hashedPw,
       }).save();
       req.session.userID = newUser.id;
-      console.log(req.session);
-      return res.sendStatus(200);
+      console.log(newUser);
+      return res.json(newUser).status(200);
     }
   } catch (error) {
     if (error instanceof yup.ValidationError) {
-      return res.json(error.errors).status(400);
+      return res.status(400).json(error.errors);
     }
     return res.status(500);
   }
@@ -74,20 +74,20 @@ authRouter.post('/register', async (req, res) => {
 
 authRouter.post('/login', async (req, res) => {
   try {
-    const { user_email, user_password } = req.body;
+    const { email, password } = req.body;
     loginSchema.validateSync(
       {
-        userEmail: user_email,
-        userPassword: user_password,
+        userEmail: email,
+        userPassword: password,
       },
-      { abortEarly: false },
+      { abortEarly: false }
     );
 
-    const user = await User.findOneOrFail({ email: user_email });
+    const user = await User.findOneOrFail({ email: email });
     if (!user) {
       return res.json('user does not exist');
     }
-    if (await bcrypt.compare(user_password, user.password)) {
+    if (await bcrypt.compare(password, user.password)) {
       req.session.userID = user.id;
       return res.json(user);
     } else {
@@ -95,7 +95,7 @@ authRouter.post('/login', async (req, res) => {
     }
   } catch (error) {
     if (error instanceof yup.ValidationError) {
-      return res.json(error.errors).status(400);
+      return res.status(400).json(error.errors)
     }
     return res.status(500);
   }
@@ -103,8 +103,9 @@ authRouter.post('/login', async (req, res) => {
 
 authRouter.post('/logout', async (req, res) => {
   console.log(req.session);
-  req.session.userID = undefined;
-  return res.sendStatus(200);
+  if (req.session) {
+    req.session.destroy(() => res.json("ok"));
+  }
 });
 
 export default authRouter;

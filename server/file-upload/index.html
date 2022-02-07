@@ -23,9 +23,12 @@
         e.preventDefault()
         return e.target.value
       }))
-      const res = await (await fetch("http://localhost:5000/post/upload",{
+      const res = await (await fetch("http://localhost:666/posts/upload",{
         method: "post",
-        body: reader
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        body: reader,
       })).json()
     })
   </script>
