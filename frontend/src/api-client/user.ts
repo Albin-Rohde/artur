@@ -7,6 +7,8 @@ export class User extends Client {
   constructor() {
     super();
   }
+
+
   public async register(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
     this.user = await this.makeRequest<IUser>({
@@ -52,7 +54,28 @@ export class User extends Client {
   }
 
   // TODO: please fix this in backend
-  // public async bio
+  public async bio(bio: string): Promise<void> {
+    return await this.makeRequest<void>({
+      route: "user",
+      method: "post",
+      action: "bio",
+      data: {
+        bio,
+      },
+    });
+  }
+
+  public async search(query: string): Promise<IUser[]> {
+    return await this.makeRequest<IUser[]>({
+      route: "user",
+      method: "post",
+      type: "json",
+      action: "search",
+      data: {
+        query,
+      },
+    });
+  }
 
   public async getSession(): Promise<IUser> {
     this.user = await this.makeRequest<IUser>({

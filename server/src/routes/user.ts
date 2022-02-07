@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Like } from 'typeorm';
 import { User } from '../entity/User';
 
 const userRouter = Router();
@@ -16,13 +17,19 @@ userRouter.get('/', async (req, res) => {
 
 userRouter.post('/bio', async (req, res) => {
   try {
-    const bio = req.body;
+    const id = req.session.userID;
+    const { bio } = req.body;
+    if (!bio || typeof bio !== 'string') {
+      return res.status(400).json('please provide a bio');
+    }
     // TODO: when session is working, remove this hardcoded uuid
-    const user = await User.findOneOrFail(
-      'd550f55b-fc58-4a48-a980-1068cc84fbe4'
-    );
-    user.bio = bio.text;
-    await user.save();
+    const user = await User.findOne(id);
+
+    if (!user) {
+      return res.status(404).json('User not found');
+    }
+
+    await User.update({ id: user.id }, { bio });
     res.status(201).json('OK');
     // tslint:disable-next-line: prettier
   } catch (e) {
@@ -42,25 +49,49 @@ userRouter.post('/follower/', async (req, res) => {
       return res.json('not a valid uuid');
     }
 
-    const [isUser, isNotTheOnlyOne]: [User[], User[] | []] = await Promise.all([
-      User.find(follower_id),
-      (User.query('select * from users where $1 = ANY(followers)', [
-        follower_id,
-      ]) as unknown) as User[] | [],
+    const [isUser, user] = await Promise.all([
+      User.findOne(follower_id),
+      (User.findOne({ where: { id: userID } }) as unknown) as User,
     ]);
 
-    if (!isUser || isNotTheOnlyOne.length > 0) {
-      return res.json('already added or not a valid user');
+    if (!isUser) {
+      return res.json('user not found');
+    }
+
+    if (typeof user.followers === 'undefined' || user.followers === null) {
+      await User.createQueryBuilder()
+        .where('id = :id', { id: user.id })
+        .update({ followers: [follower_id] })
+        .execute();
+      return res.json({ user, message: 'user added to followers' });
     } else {
-      const user2 = await User.query(
-        'UPDATE users SET followers = ARRAY_APPEND(followers, $1) WHERE id = $2 RETURNING *',
-        [follower_id, userID]
-      );
-      console.log(user2);
-      return res.json(user2);
+      if (user.followers.includes(follower_id)) {
+        return res.json('user already following');
+      } else {
+        await User.createQueryBuilder()
+          .where('id = :id', { id: user.id })
+          .update({ followers: [...user.followers, follower_id] })
+          .execute();
+
+        return res.json({ user, message: 'user added to followers' });
+      }
     }
   } catch (error) {
     console.log(error);
+  }
+});
+
+userRouter.post('/search', async (req, res) => {
+  try {
+    const { query } = req.body;
+    const users = await User.getRepository().find({
+      where: {
+        name: Like(`%${query}%`),
+      },
+    });
+    return res.json(users);
+  } catch (error) {
+    return res.status(500).json(error);
   }
 });
 

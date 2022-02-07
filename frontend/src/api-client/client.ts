@@ -24,14 +24,10 @@ export class Client {
     query,
     type = "json",
   }: RestRequestOptions): Promise<T> {
-    console.log(process);
-    console.log(this.baseUrl);
-    console.log(method, route, data, action, query);
     try {
       action = action ? `/${action}` : "";
       query = query === undefined ? "" : `/?type=${query}`;
-      console.log(`${this.baseUrl}/${route}${action}${query}`);
-      console.log("base url", this.baseUrl);
+      console.log(data);
       let res;
       if (type === "json") {
         res = await fetch(`${this.baseUrl}/${route}${action}${query}`, {
@@ -53,7 +49,6 @@ export class Client {
           credentials: "include",
         });
       }
-      console.log("res", res);
       const resBody = await res.json();
       if (!resBody) {
         throw new InternalServerError("No data in response");

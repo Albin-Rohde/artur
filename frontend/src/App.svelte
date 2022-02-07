@@ -50,6 +50,7 @@
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
       currentUser = await user.login(detail);
+      console.log('currentUser: ', currentUser);
       setScreen('Dashboard');
     } catch (error) {
       console.log(error);

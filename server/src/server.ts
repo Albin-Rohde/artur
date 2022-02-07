@@ -1,6 +1,7 @@
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express from 'express';
+import { MemoryStore, rateLimit } from 'express-rate-limit';
 import session from 'express-session';
 import morgan from 'morgan';
 import 'reflect-metadata';
@@ -28,7 +29,7 @@ const server = async () => {
           limit: '500mb',
         })
       );
-      app.disable('X-Powered-By');
+      app.disable('x-powered-by');
       app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
       app.use(morgan('dev'));
       app.use(
@@ -42,6 +43,18 @@ const server = async () => {
             httpOnly: false,
             sameSite: false,
           },
+        })
+      );
+
+      app.use(
+        rateLimit({
+          windowMs: 15 * 60 * 1000, // 15 minutes
+          max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+          message:
+            'Too many request  from this IP, please try again after some time',
+          standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+          legacyHeaders: true, // Enable the `X-RateLimit-*` headers
+          store: new MemoryStore(), // Use the memory store
         })
       );
       app.use('/auth', authRouter);
