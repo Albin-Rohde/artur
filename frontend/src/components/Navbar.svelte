@@ -22,7 +22,7 @@ import App from "../App.svelte";
   .navbar {
     display: grid;
     align-items: center;
-    background-color: #add5a9;
+    background-color: #96cb92;
     grid-template-columns: 15% 70% 15%;
     height: 16vh;
 

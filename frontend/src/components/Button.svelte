@@ -4,8 +4,7 @@
 </script>
 
  
-<button class='knapp' on:click|preventDefault={onClick} >{text}</button>
-
+<button class='knapp' on:click|preventDefault={onClick} >{text} </button>
 
 
 <style>
