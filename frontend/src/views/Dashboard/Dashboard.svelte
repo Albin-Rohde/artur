@@ -1,13 +1,13 @@
 <script lang="ts">
+    import type { IUser } from "../../api-client";
+    import { Post,User } from "../../api-client";
     import type { IPost, IUser } from "../../api-client";
-    import { Post } from '../../api-client';
     import PlusButton from "../../components/PlusButton.svelte";
     import Button from "../../components/Button.svelte";
     import PostCreate from "../../components/PostCreate.svelte";
-import App from "../../App.svelte";
+    import App from "../../App.svelte";
     export let currentUser: IUser;
     export let onLogout: () => Promise<void>
-    console.log(currentUser);
     const scrollY = document.body.style.top;
     let postCreation = ""
     let post_description: string;
@@ -45,8 +45,8 @@ import App from "../../App.svelte";
 {:else}
     <PlusButton onClick={()=> showPostCreate()}/>
 {/if}
-    
-   
+
+
 <div class="feedContainer">
     <div class="feed">
         {#if posts.length > 0}
