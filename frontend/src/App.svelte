@@ -39,6 +39,8 @@
       console.log('register with data: ', detail)
       currentUser = await user.register(detail);
       console.log('currentUser: ', currentUser)
+      console.log("Dashboard");
+      
       setScreen('Dashboard');
     } catch (error) {
       console.log(error);
@@ -84,5 +86,6 @@
   * {
     margin: 0px;
     padding: 0px;
+    z-index: -1;
   }
 </style>

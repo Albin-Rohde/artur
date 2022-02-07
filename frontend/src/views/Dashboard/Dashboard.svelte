@@ -1,51 +1,96 @@
 <script lang="ts">
     import type { IUser } from "../../api-client";
     import { Post } from '../../api-client';
+    import PlusButton from "../../components/PlusButton.svelte";
     import Button from "../../components/Button.svelte";
-
-
-export let currentUser: IUser;
-export let onLogout: () => Promise<void>
+    import PostCreate from "../../components/PostCreate.svelte";
+    export let currentUser: IUser;
+    export let onLogout: () => Promise<void>
+    console.log(currentUser);
+    const scrollY = document.body.style.top;
+    let postCreation = ""
     let post_description: string;
     let post_title: string;
     let file: FileList;
+    const showPostCreate = ()=>{
+        postCreation =  "Visible"
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${window.scrollY}px`;
+    }
+    const hidePostCreate = ()=>{
+        postCreation =  ""
+        document.body.style.position = '';
+        document.body.style.top = '';
+    }
+// (async ()=> {
+//     console.log("hello")
+//     const posts = await post.getFeed('color')
+//     console.log(posts)
 
-const post = new Post();
-
-
-(async ()=> {
-    console.log("hello")
-    const posts = await post.getFeed('color')
-    console.log(posts)
-
-})()
+// })()
 
 window.onload = async () => {
 }
 
-const upload = async () => {
-    console.log(post_description, post_title, file[0]);
-    const p =  await post.upload({
-        post_description,
-        post_title,
-        file: file[0]
-    })
-    console.log(p)
-}
 
 </script>
 
+<h1>Dethär är din dashboard.</h1>
+<h2> Hej {currentUser.name}.</h2>
+
+<Button onClick={onLogout} text="Logout"/>
+
+{#if postCreation === "Visible"}
+    <PostCreate onClick={()=>hidePostCreate()} currentUser = {currentUser}/>
+{:else}
+    <PlusButton onClick={()=> showPostCreate()}/>
+{/if}
+    
+   
 <div class="feedContainer">
     <div class="feed">
-        <h1>Dethär är din dashboard.</h1>
-        <h2> Hej {currentUser.name}.</h2>
-        <form action="">
-            <input type="text" name="title" bind:value={post_title} placeholder="Title">
-            <input type="text" name="content" bind:value={post_description} placeholder="Content">
-            <input type="file" name="file" bind:files={file}   >
-            <Button onClick={() => upload()} text="Create Post"  />
-        </form>
-        <Button onClick={onLogout} text="Logout"/>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+
     </div>
 </div>
 
@@ -58,5 +103,16 @@ const upload = async () => {
 .feed{
     grid-column: 3/11;
     grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1%;
+    /* grid-auto-rows: minmax(50px, auto); */
+
 }
+.feed div{
+    width: 100%;
+    height: 200px;
+    background-color: #d6a7bd;    
+}
+
 </style>
