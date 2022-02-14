@@ -1,15 +1,16 @@
-<script>
-
-import App from "../App.svelte";
-
+<script lang="ts">
+export let onClick1: (...a: any) => any;
+export let onClick2: (...a: any) => any;
+// export let onClick3: (...a:any) => any;
 </script>
 <div class='navbar'>
 
  
-  <div class="avatar-container"><img src='assets/avatar.png' alt="*_*" class="avatar"> </div>
-  <div class="logo-container"> <img src='assets/text.png' alt="*_*" class="logo"></div>
- <div class="burgir-container"><img src='assets/hamburger.png' alt="*_*" class="hamburger"></div>
+  <div class="avatar-container" on:click|preventDefault={onClick1} ><img src='assets/avatar.png' alt="*_*" class="avatar"> </div>
+  <div class="logo-container" on:click|preventDefault={onClick2} > <img src='assets/text.png' alt="*_*" class="logo"></div>
+  <div class="burgir-container" ><img src='assets/hamburger.png' alt="*_*" class="hamburger"></div> 
 </div>
+
 <div class='line'></div>
 
 

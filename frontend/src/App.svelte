@@ -6,8 +6,11 @@
   import Dashboard from "./views/Dashboard/Dashboard.svelte";
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
+  import Profile from "./views/Profile/Profile.svelte";
 
-  type ScreenType = "Register" | "Login" | "Dashboard";
+  // console.log(process);
+
+  type ScreenType = "Register" | "Login" | "Dashboard" | "Profile";
 
   let screen = "Register";
 
@@ -49,12 +52,8 @@
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
       const res = await user.login(detail);
-      if (res === "user does not exist") {
-        console.log("user does not exist");
-      } else {
-        setScreen("Dashboard");
-        window.location.replace("/");
-      }
+      setScreen("Dashboard");
+      window.location.replace("/");
     } catch (error) {
       console.log(error);
     }
@@ -116,17 +115,28 @@
     }
   };
 
+  const setProfile = () => {
+    setScreen("Profile");
+  };
+  const setDashboard = () => {
+    setScreen("Dashboard");
+  };
+
+  console.log(screen);
+
   console.log(screen);
 </script>
 
 <main>
-  <Navbar />
+  <Navbar onClick1={setProfile} onClick2={setDashboard} />
   {#if screen === "Register"}
     <Register {setScreen} onRegister={register} />
   {:else if screen === "Login"}
     <Login {setScreen} onLogin={login} {onGoogleLogin} {onGithubLogin} />
   {:else if screen === "Dashboard" && currentUser}
     <Dashboard {currentUser} onLogout={logout} />
+  {:else if screen === "Profile" && currentUser}
+    <Profile {currentUser} onLogout={logout} />
   {/if}
 </main>
 

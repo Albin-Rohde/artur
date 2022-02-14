@@ -40,12 +40,10 @@
     />
     <br />
     <div>
-      Don't have an account? <div
+      Don't have an account? <a
         class="link"
-        on:click={() => setScreen("Register")}
+        on:click={() => setScreen("Register")}>Register</a
       >
-        Register
-      </div>
     </div>
   </div>
 </div>
