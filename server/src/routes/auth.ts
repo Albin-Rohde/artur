@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { Router } from 'express';
 import * as yup from 'yup';
 import { User } from '../entity/User';
+import loginRequired from '../middleware/login';
 
 const authRouter = Router();
 
@@ -106,7 +107,7 @@ authRouter.post('/login', async (req, res) => {
   }
 });
 
-authRouter.post('/logout', async (req, res) => {
+authRouter.post('/logout', loginRequired, async (req, res) => {
   console.log(req.session);
   if (req.session) {
     req.session.destroy(() => res.json('ok'));

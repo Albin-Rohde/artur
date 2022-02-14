@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Like } from 'typeorm';
 import { User } from '../entity/User';
+import loginRequired from '../middleware/login';
 
 const userRouter = Router();
 
@@ -15,7 +16,7 @@ userRouter.get('/', async (req, res) => {
   return res.json(user);
 });
 
-userRouter.post('/bio', async (req, res) => {
+userRouter.post('/bio', loginRequired, async (req, res) => {
   try {
     const id = req.session.userID;
     const { bio } = req.body;
@@ -38,7 +39,7 @@ userRouter.post('/bio', async (req, res) => {
   }
 });
 
-userRouter.post('/follower/', async (req, res) => {
+userRouter.post('/follower/', loginRequired, async (req, res) => {
   try {
     const { userID } = req.session;
     const { follower_id } = req.body;
@@ -90,7 +91,7 @@ userRouter.post('/follower/', async (req, res) => {
   }
 });
 
-userRouter.post('/search', async (req, res) => {
+userRouter.post('/search', loginRequired, async (req, res) => {
   try {
     const { query } = req.body;
     const users = await User.getRepository().find({
