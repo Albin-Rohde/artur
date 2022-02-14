@@ -2,6 +2,7 @@ import { Request, Router } from 'express';
 import * as yup from 'yup';
 import { Post } from '../entity/Post';
 import { User } from '../entity/User';
+import loginRequired from '../middleware/login';
 
 const typeSchema = yup.object().shape({
   type: yup
@@ -18,9 +19,9 @@ interface Query {
 
 router.get(
   '/',
+  loginRequired,
   async (req: Request<{}, {}, {}, Query, Record<any, any>>, res) => {
     const id = req.session.userID;
-    console.log(id);
     const { type } = req.query;
 
     try {
@@ -104,7 +105,7 @@ router.get(
   }
 );
 
-router.get('/my', async (req: Request<{}, {}, Query>, res) => {
+router.get('/my', loginRequired, async (req: Request<{}, {}, Query>, res) => {
   const id = req.session.userID;
   const { type } = req.query;
   try {
