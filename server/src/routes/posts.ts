@@ -97,14 +97,6 @@ router.post('/upload', loginRequired, async (req, res) => {
       message: error,
     });
   }
-
-  // const inserts = await Post.create({
-  //   photoUrl: `${req.protocol}://${req.hostname}:${
-  //     process.env.SERVER_PORT
-  //   }/posts/${date}${path.extname(file.originalname)}`,
-  //   createdAt: date.toString(),
-  //   ownerId: id,
-  // }).save();
 });
 
 router.post('/like', loginRequired, async (req, res) => {
@@ -151,7 +143,7 @@ router.get('likes', loginRequired, async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', loginRequired, (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));
