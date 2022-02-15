@@ -71,6 +71,10 @@ export default {
 		}),
 		replace({
 			preventAssignment: true,
+			"process.env.NODE_ENV": process.env.NODE_ENV,
+			// globalThis: {
+			// 	"process.env.NODE_ENV": process.env.NODE_ENV
+			// },
 			process: JSON.stringify({
 				hello: 'world',
 				SERVER_URL: 'hello',
@@ -78,6 +82,7 @@ export default {
 				env: {
 					SERVER_URL: process.env.SERVER_URL,
 					FRONT_PORT: process.env.FRONT_PORT,
+					NODE_ENV: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
 					// FRONT_URL: Process.env.FRONT_URL,
 				}
 			}),

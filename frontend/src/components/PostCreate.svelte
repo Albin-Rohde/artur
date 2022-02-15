@@ -1,33 +1,50 @@
 <script lang="ts">
 
 
-import {onDestroy} from 'svelte'
+// import Dropzone from 'svelte-file-dropzone';
+import Dropzone from 'svelte-atoms/DropZone.svelte';
 import type { IUser } from "../api-client";
-import { Post } from "../api-client"
+import { Post } from "../api-client";
 export let currentUser: IUser;
 export let onClick: (...a: any) => any;
 
 
 let post_description: string;
 let post_title: string;
-let file: FileList;
+let file: File;
+let file_name: string
+
+let reader = new FileReader()
 const post = new Post();
 (async ()=> {
     console.log("hello")
     const posts = await post.getFeed('color')
     console.log(posts)
 })()
-window.onload = async () => {
-}
 const upload = async () => {
     console.log(post_description, post_title, file[0]);
     const p =  await post.upload({
         post_description,
         post_title,
-        file: file[0]
+        file: file
     })
     console.log(p)
 	window.location.replace("/");
+}
+let image;
+
+const fileChose = (e) => {
+	console.log(e.dataTransfer.files)
+	const f = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+	console.log(f)
+	if(f){
+	reader.addEventListener('load', () => {
+		image = reader.result;
+	})
+	reader.readAsDataURL(f);
+	file = f
+	file_name = f.name
+	}
 }
 
 
@@ -46,7 +63,11 @@ let closeCallback
 			<form class="form" action="">
 				<textarea class="title" type="text" name="title" bind:value={post_title} placeholder="Title"></textarea>
 				<textarea class="description" type="text" name="content" bind:value={post_description} placeholder="Content"></textarea>
-				<input class="file" type="file" name="file" bind:files={file}   >
+				<!-- <Dropzone on:drop={fileChose} /> -->
+				<Dropzone class="drop" fileTitle={file_name} dropOnPage on:drop={fileChose} on:change={fileChose}  />
+				{#if image}
+					<img src={image} alt="hello" class="file"  />
+				{/if}
 				<button class='knapp' on:click|preventDefault={()=> upload()} >{"Create Post"} </button>
 				<button class="close" on:click|preventDefault={onClick} >Cancel</button>
 			</form>
@@ -56,6 +77,13 @@ let closeCallback
 	textarea{
 		resize: none;
 	}
+
+	.drop{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	.background{
 		position: fixed;
 		left: 0px;
@@ -101,6 +129,8 @@ let closeCallback
 		padding: 1rem;
 	}
 	.file{
+		width: 100%;
+		height: 100%;
 		grid-row: 2/12;
 		grid-column: 2/7;
 		background-color: white;

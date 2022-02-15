@@ -1,11 +1,9 @@
 <script lang="ts">
-    import type { IUser } from "../../api-client";
-    import { Post,User } from "../../api-client";
-    import type { IPost, IUser } from "../../api-client";
-    import PlusButton from "../../components/PlusButton.svelte";
+    import type { IPost,IUser } from "../../api-client";
+    import { Post } from '../../api-client';
     import Button from "../../components/Button.svelte";
+    import PlusButton from "../../components/PlusButton.svelte";
     import PostCreate from "../../components/PostCreate.svelte";
-    import App from "../../App.svelte";
     export let currentUser: IUser;
     export let onLogout: () => Promise<void>
     const scrollY = document.body.style.top;
@@ -26,6 +24,7 @@
         document.body.style.top = '';
     }
  (async ()=> {
+     console.log("currentUser", currentUser);
     console.log("hello")
     const postClient = new Post();
     posts = await postClient.getFeed('time')
@@ -45,7 +44,6 @@
 {:else}
     <PlusButton onClick={()=> showPostCreate()}/>
 {/if}
-
 
 <div class="feedContainer">
     <div class="feed">

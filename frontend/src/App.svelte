@@ -2,11 +2,12 @@
   import type { IUser,IUserRequest } from './api-client';
   import { User } from './api-client';
   import Navbar from "./components/Navbar.svelte";
+  import { signInWithGoogle } from './firebase';
   import Dashboard from './views/Dashboard/Dashboard.svelte';
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
 
-  console.log(process);
+  // console.log(process);
 
   type ScreenType = 'Register' | 'Login' | 'Dashboard'
   
@@ -29,6 +30,7 @@
   }
 
   window.onload = () => getSession();
+  // console.log(global)
   const setScreen = (scream: ScreenType) => {
     screen = scream
   } 
@@ -49,12 +51,30 @@
 
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
-      currentUser = await user.login(detail);
-      console.log('currentUser: ', currentUser);
-      setScreen('Dashboard');
+      const res = await user.login(detail);
+      if(res === 'user does not exist'){
+        console.log('user does not exist')
+      } else {
+        setScreen('Dashboard');
+      }
     } catch (error) {
       console.log(error);
     }
+  }
+
+  const onGoogleLogin = async() => {
+    const u = await signInWithGoogle();
+        console.log(user);
+        if (u) {
+         const idk = await user.googleLogin(u)
+         console.log(typeof idk);
+         if(typeof idk === "string") {
+           setScreen("Login");
+         } else {
+           currentUser = idk;
+           setScreen('Dashboard');
+         }
+        }
   }
 
   const logout = async (): Promise<void> => {
@@ -71,12 +91,16 @@
 
 </script>
 
+<svelte:head>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</svelte:head>
+
 <main>
   <Navbar />
   {#if screen === "Register"}
     <Register setScreen={setScreen} onRegister={register}/>
   {:else if screen === "Login"}
-    <Login  setScreen={setScreen} onLogin={login}/>
+    <Login  setScreen={setScreen} onLogin={login} onGoogleLogin={onGoogleLogin} />
   {:else if screen === "Dashboard" && currentUser}
     <Dashboard currentUser={currentUser} onLogout={logout}/>
   {/if}
