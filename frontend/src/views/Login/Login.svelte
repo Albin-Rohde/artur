@@ -7,47 +7,14 @@
   export let onLogin: (u: IUserRequest) => Promise<void>;
   export let onGoogleLogin: () => Promise<void>;
   export let onGithubLogin: () => Promise<void>;
-    let email = "";
-    let password = "";
-    
-  
-
-
-
-// const signOutWithGoogle = async () => {
-//   return await signOut(auth);
-// };
-
-
-
-    // const handleGoogleLogin = async () => {
-    //     const u = await signInWithGoogle();
-    //     console.log(user);
-    //     if (u) {
-    //      const idk = await user.googleLogin(u)
-    //      console.log(idk);
-    //      if(typeof idk === "string") {
-    //        setScreen("login");
-    //      } else {
-    //        setScreen("Dashboard");
-    //      }
-    //     }
-        // if (user) {
-        //     onLogin({
-        //         email: user.email,
-        //         name: user.displayName,
-        //         photoUrl: user.photoURL,
-        //         uid: user.uid
-        //     });
-        // }
-    // };
-
+  let email = "";
+  let password = "";
 </script>
 
 <div class="site-container">
   <div class="login-container">
     <GoogleButton onClick={() => onGoogleLogin()} />
-    <GithubButton onClick={() => onGithubLogin()}  />
+    <GithubButton onClick={() => onGithubLogin()} />
     <h2>Login to your account</h2>
     <br />
 
@@ -63,12 +30,23 @@
       placeholder="password"
       bind:value={password}
     /><br />
-    <Button text="Log In" onClick={() => onLogin({
-      email,
-      password
-    })} ></Button>
-    <br>
-    <div>Don't have an account? <div class="link" on:click={()=> setScreen('Register')}>Register</div> </div>
+    <Button
+      text="Log In"
+      onClick={() =>
+        onLogin({
+          email,
+          password,
+        })}
+    />
+    <br />
+    <div>
+      Don't have an account? <div
+        class="link"
+        on:click={() => setScreen("Register")}
+      >
+        Register
+      </div>
+    </div>
   </div>
 </div>
 
@@ -90,7 +68,7 @@
   .input-style {
     width: 100%;
   }
-  .link{
+  .link {
     cursor: pointer;
   }
 </style>

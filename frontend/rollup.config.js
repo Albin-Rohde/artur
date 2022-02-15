@@ -80,7 +80,7 @@ export default {
 				SERVER_URL: 'hello',
 				FRONT_URL: 'hello',
 				env: {
-					SERVER_URL: process.env.SERVER_URL || 'http://localhost:666',
+					SERVER_URL: process.env.SERVER_URL || 'http://localhost:5000',
 					FRONT_PORT: process.env.FRONT_PORT || '3000',
 					NODE_ENV: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
 					// FRONT_URL: Process.env.FRONT_URL,
