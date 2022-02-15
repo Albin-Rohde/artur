@@ -107,6 +107,27 @@ authRouter.post('/login', async (req, res) => {
   }
 });
 
+authRouter.post('/login-with-google', async (req, res) => {
+  try {
+    const { email, name, avatar } = req.body;
+    const [userByEmail, userByName] = await Promise.all([
+      User.findOne({ email: email }),
+      User.findOne({ name: name }),
+    ]);
+
+    if (!userByEmail || !userByName) {
+      const googleUser = await User.create({
+        name: name,
+        email: email,
+        avatar: avatar,
+      }).save();
+      return res.json(googleUser).status(200);
+    } else {
+      return res.json(userByEmail).status(200);
+    }
+  } catch (error) {}
+});
+
 authRouter.post('/logout', loginRequired, async (req, res) => {
   console.log(req.session);
   if (req.session) {

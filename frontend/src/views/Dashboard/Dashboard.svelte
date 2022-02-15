@@ -1,10 +1,9 @@
 <script lang="ts">
-    import type { IPost, IUser } from "../../api-client";
+    import type { IPost,IUser } from "../../api-client";
     import { Post } from '../../api-client';
-    import PlusButton from "../../components/PlusButton.svelte";
     import Button from "../../components/Button.svelte";
+    import PlusButton from "../../components/PlusButton.svelte";
     import PostCreate from "../../components/PostCreate.svelte";
-import App from "../../App.svelte";
     export let currentUser: IUser;
     export let onLogout: () => Promise<void>
     console.log(currentUser);
@@ -26,6 +25,7 @@ import App from "../../App.svelte";
         document.body.style.top = '';
     }
  (async ()=> {
+     console.log("currentUser", currentUser);
     console.log("hello")
     const postClient = new Post();
     posts = await postClient.getFeed('time')

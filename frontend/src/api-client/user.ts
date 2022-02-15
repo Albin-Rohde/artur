@@ -8,7 +8,6 @@ export class User extends Client {
     super();
   }
 
-
   public async register(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
     this.user = await this.makeRequest<IUser>({
@@ -23,7 +22,7 @@ export class User extends Client {
     });
     return this.user;
   }
-  public async login(data: IUserRequest): Promise<IUser> {
+  public async login(data: IUserRequest): Promise<IUser | string> {
     console.log("data", data);
     this.user = await this.makeRequest<IUser>({
       route: "auth",
@@ -31,6 +30,29 @@ export class User extends Client {
       action: "login",
       data,
     });
+    return this.user;
+  }
+
+  public async googleLogin({
+    name,
+    email,
+    avatar,
+  }: {
+    name: string;
+    email: string;
+    avatar: string;
+  }): Promise<IUser | string> {
+    this.user = await this.makeRequest<IUser>({
+      route: "auth",
+      method: "post",
+      action: "login-with-google",
+      data: {
+        name,
+        email,
+        avatar,
+      },
+    });
+    console.log("user", this.user);
     return this.user;
   }
 
@@ -42,7 +64,7 @@ export class User extends Client {
     });
   }
 
-  public async addFollower(you: string, id: string): Promise<void> {
+  public async addFollower(id: string): Promise<void> {
     return await this.makeRequest<void>({
       route: "user",
       method: "post",
