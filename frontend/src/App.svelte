@@ -126,10 +126,6 @@
   console.log(screen);
 </script>
 
-<svelte:head>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-</svelte:head>
-
 <main>
   <Navbar />
   {#if screen === "Register"}
