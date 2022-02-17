@@ -1,9 +1,10 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
+  GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut,
+  signOut as out,
 } from "firebase/auth";
 
 interface User {
@@ -44,8 +45,24 @@ const signInWithGoogle = async (): Promise<User> => {
   }
 };
 
-const signOutWithGoogle = async () => {
-  return await signOut(auth);
+const signUpWithGithub = async (): Promise<User> => {
+  const user = await (
+    await signInWithPopup(auth, new GithubAuthProvider())
+  ).user;
+  if (user) {
+    return {
+      name: user.displayName ? user.displayName : "",
+      email: user.email ? user.email : "",
+      avatar: user.photoURL ? user.photoURL : "",
+      uid: user.uid ? user.uid : "",
+    };
+  } else {
+    throw new Error("User is not defined");
+  }
 };
 
-export { signInWithGoogle, signOutWithGoogle, app, auth, provider };
+const signOut = async () => {
+  return await out(auth);
+};
+
+export { signInWithGoogle, signOut, app, auth, provider, signUpWithGithub };

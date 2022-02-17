@@ -107,27 +107,65 @@ authRouter.post('/login', async (req, res) => {
   }
 });
 
-authRouter.post('/login-with-google', async (req, res) => {
+authRouter.post('/social-login', async (req, res) => {
   try {
-    const { email, name, avatar } = req.body;
-    const [userByEmail, userByName] = await Promise.all([
-      User.findOne({ email: email }),
-      User.findOne({ name: name }),
-    ]);
+    let {
+      email,
+      name,
+      avatar,
+      provider,
+    }: {
+      email: string;
+      name: string;
+      avatar: string;
+      provider: string;
+    } = req.body;
 
-    if (!userByEmail || !userByName) {
-      const googleUser = await User.create({
+    console.log('email: ' + email + 'name: ' + name + 'avatar: ' + avatar);
+
+    if (!name) {
+      name = '';
+    } else if (!email) {
+      email = '';
+    } else if (!avatar) {
+      avatar = '';
+    }
+    console.log('email: ' + email + 'name: ' + name + 'avatar: ' + avatar);
+
+    let user: User | undefined;
+
+    if (name.length <= 0) {
+      user = await User.findOne({ email: `${provider}:${email}` });
+    } else if (email.length <= 0) {
+      user = await User.findOne({ name });
+    } else if (name.length <= 0 && email.length <= 0) {
+      user = await User.findOne({ avatar });
+    } else {
+      user = await User.findOne({ name, email: `${provider}:${email}` });
+    }
+
+    // const [userByEmail, userByName] = await Promise.all([
+    //   User.findOne({ email: email }),
+    //   User.findOne({ name: name }),
+    // ]);
+
+    if (!user) {
+      const socialUser = await User.create({
         name: name,
-        email: email,
+        email: `${provider}:${email}`,
         avatar: avatar,
       }).save();
-      req.session.userID = googleUser.id;
-      return res.json(googleUser).status(200);
+      req.session.userID = socialUser.id;
+      return res.json(socialUser).status(200);
     } else {
-      req.session.userID = userByEmail.id;
-      return res.json(userByEmail).status(200);
+      req.session.userID = user.id;
+      return res.json(user).status(200);
     }
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof yup.ValidationError) {
+      return res.status(400).json(error.errors);
+    }
+  }
 });
 
 authRouter.post('/logout', loginRequired, async (req, res) => {

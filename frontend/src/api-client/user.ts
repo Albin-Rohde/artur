@@ -33,23 +33,26 @@ export class User extends Client {
     return this.user;
   }
 
-  public async googleLogin({
+  public async socialLogin({
     name,
     email,
     avatar,
+    provider,
   }: {
     name: string;
     email: string;
     avatar: string;
+    provider: "github" | "google";
   }): Promise<IUser | string> {
     this.user = await this.makeRequest<IUser>({
       route: "auth",
       method: "post",
-      action: "login-with-google",
+      action: "social-login",
       data: {
         name,
         email,
         avatar,
+        provider,
       },
     });
     console.log("user", this.user);

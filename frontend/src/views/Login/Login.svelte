@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { IUserRequest } from "../../api-client";
-  import { User } from '../../api-client/user';
   import Button from "../../components/Button.svelte";
+  import GithubButton from "../../components/GithubButton.svelte";
   import GoogleButton from "../../components/GoogleButton.svelte";
   export let setScreen: any;
   export let onLogin: (u: IUserRequest) => Promise<void>;
   export let onGoogleLogin: () => Promise<void>;
+  export let onGithubLogin: () => Promise<void>;
     let email = "";
     let password = "";
     
@@ -46,6 +47,7 @@
 <div class="site-container">
   <div class="login-container">
     <GoogleButton onClick={() => onGoogleLogin()} />
+    <GithubButton onClick={() => onGithubLogin()}  />
     <h2>Login to your account</h2>
     <br />
 
