@@ -2,7 +2,7 @@
   import type { IUser,IUserRequest } from './api-client';
   import { User } from './api-client';
   import Navbar from "./components/Navbar.svelte";
-  import { signInWithGoogle } from './firebase';
+  import { signInWithGoogle,signOutWithGoogle } from './firebase';
   import Dashboard from './views/Dashboard/Dashboard.svelte';
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
@@ -77,8 +77,11 @@
         }
   }
 
-  const logout = async (): Promise<void> => {
+  const logout = async (u: IUser): Promise<void> => {
     try {
+      if(u.avatar && u.avatar.includes('googleusercontent')) {
+       await signOutWithGoogle()
+      } 
       await user.logout();
       currentUser = null;
       setScreen("Login");

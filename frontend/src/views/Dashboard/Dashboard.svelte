@@ -37,7 +37,7 @@
 <h1>Dethär är din dashboard.</h1>
 <h2> Hej {currentUser.name}.</h2>
 
-<Button onClick={onLogout} text="Logout"/>
+<Button onClick={() => onLogout(currentUser)} text="Logout"/>
 
 {#if postCreation === "Visible"}
     <PostCreate onClick={()=>hidePostCreate()} currentUser = {currentUser}/>

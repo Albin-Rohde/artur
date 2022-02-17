@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { IUserRequest } from "../../api-client";
-  import { User } from '../../api-client/user';
   import Button from "../../components/Button.svelte";
   import GoogleButton from "../../components/GoogleButton.svelte";
   export let setScreen: any;
@@ -8,39 +7,6 @@
   export let onGoogleLogin: () => Promise<void>;
     let email = "";
     let password = "";
-    
-  
-
-
-
-// const signOutWithGoogle = async () => {
-//   return await signOut(auth);
-// };
-
-
-
-    // const handleGoogleLogin = async () => {
-    //     const u = await signInWithGoogle();
-    //     console.log(user);
-    //     if (u) {
-    //      const idk = await user.googleLogin(u)
-    //      console.log(idk);
-    //      if(typeof idk === "string") {
-    //        setScreen("login");
-    //      } else {
-    //        setScreen("Dashboard");
-    //      }
-    //     }
-        // if (user) {
-        //     onLogin({
-        //         email: user.email,
-        //         name: user.displayName,
-        //         photoUrl: user.photoURL,
-        //         uid: user.uid
-        //     });
-        // }
-    // };
-
 </script>
 
 <div class="site-container">
