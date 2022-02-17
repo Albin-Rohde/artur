@@ -121,8 +121,10 @@ authRouter.post('/login-with-google', async (req, res) => {
         email: email,
         avatar: avatar,
       }).save();
+      req.session.userID = googleUser.id;
       return res.json(googleUser).status(200);
     } else {
+      req.session.userID = userByEmail.id;
       return res.json(userByEmail).status(200);
     }
   } catch (error) {}

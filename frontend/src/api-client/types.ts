@@ -5,6 +5,7 @@ export interface IUser {
   password: string;
   bio: string;
   followers: string[];
+  avatar?: string;
 }
 
 export interface IPost {

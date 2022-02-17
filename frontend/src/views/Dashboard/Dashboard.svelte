@@ -5,7 +5,7 @@
     import PlusButton from "../../components/PlusButton.svelte";
     import PostCreate from "../../components/PostCreate.svelte";
     export let currentUser: IUser;
-    export let onLogout: () => Promise<void>
+    export let onLogout: (u: IUser) => Promise<void>
     console.log(currentUser);
     const scrollY = document.body.style.top;
     let postCreation = ""
@@ -38,7 +38,7 @@
 <h1>Dethär är din dashboard.</h1>
 <h2> Hej {currentUser.name}.</h2>
 
-<Button onClick={onLogout} text="Logout"/>
+<Button onClick={() => onLogout(currentUser)} text="Logout"/>
 
 {#if postCreation === "Visible"}
     <PostCreate onClick={()=>hidePostCreate()} currentUser = {currentUser}/>
