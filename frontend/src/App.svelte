@@ -55,6 +55,7 @@
         console.log("user does not exist");
       } else {
         setScreen("Dashboard");
+        window.location.replace('/');
       }
     } catch (error) {
       console.log(error);

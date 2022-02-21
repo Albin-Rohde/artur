@@ -1,11 +1,11 @@
 import { Client } from "./client";
+import { InternalServerError } from "./errors";
 import type { IPost, IPostRequest, PostSortString } from "./types";
-import {InternalServerError} from './errors'
 
 type PostResponse = {
-  msg: string
-  posts: IPost[]
-}
+  msg: string;
+  posts: IPost[];
+};
 
 export class Post extends Client {
   constructor() {
@@ -24,8 +24,10 @@ export class Post extends Client {
       type: "formData",
     });
 
-    if(!id) {
-      throw new InternalServerError("No id in response")
+    console.log("id", id);
+
+    if (!id) {
+      throw new InternalServerError("No id in response");
     }
 
     return await this.makeRequest<string>({
@@ -45,6 +47,6 @@ export class Post extends Client {
       route: "feed",
       method: "get",
       query,
-    }).then(r => r.posts);
+    }).then((r) => r.posts);
   }
 }

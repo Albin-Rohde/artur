@@ -109,4 +109,17 @@ export class User extends Client {
     });
     return this.user;
   }
+
+  public async uploadAvatar(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    const id = await this.makeRequest<string>({
+      route: "user",
+      method: "post",
+      data: formData,
+      action: "upload",
+      type: "formData",
+    });
+    return id;
+  }
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { IPost,IUser } from "../../api-client";
-    import { Post } from '../../api-client';
+    import { Post,User } from "../../api-client";
     import Button from "../../components/Button.svelte";
     import PlusButton from "../../components/PlusButton.svelte";
     import PostCreate from "../../components/PostCreate.svelte";
@@ -13,6 +13,8 @@
     let post_title: string;
     let file: FileList;
     let posts: IPost[] = [];
+    
+    const user = new User()
 
     const showPostCreate = ()=>{
         postCreation =  "Visible"
@@ -24,6 +26,13 @@
         document.body.style.position = '';
         document.body.style.top = '';
     }
+
+    const uploadAvatar = async () => {
+        console.log(file[0])
+        const avatar = await user.uploadAvatar(file[0])
+        console.log(avatar)
+    }
+
  (async ()=> {
      console.log("currentUser", currentUser);
     console.log("hello")
@@ -48,6 +57,8 @@
     
    
 <div class="feedContainer">
+    <input type="file" bind:files={file} />
+    <button on:click|preventDefault={() => uploadAvatar()}>Click me</button>
     <div class="feed">
         {#if posts.length > 0}
             {#each posts as post}
