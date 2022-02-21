@@ -1,6 +1,7 @@
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express from 'express';
+import fileUpload from 'express-fileupload';
 import { MemoryStore, rateLimit } from 'express-rate-limit';
 import session from 'express-session';
 import morgan from 'morgan';
@@ -30,7 +31,12 @@ const server = async () => {
         })
       );
       app.disable('x-powered-by');
-      app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+      app.use(
+        cors({
+          origin: 'http://localhost:3000',
+          credentials: true,
+        })
+      );
       app.use(morgan('dev'));
       app.use(
         session({
@@ -57,6 +63,16 @@ const server = async () => {
           store: new MemoryStore(), // Use the memory store
         })
       );
+
+      app.use(
+        fileUpload({
+          limits: { fileSize: 50 * 1024 * 1024 },
+          responseOnLimit: 'File size is too big',
+          abortOnLimit: true,
+          preserveExtension: true,
+        })
+      );
+
       app.use('/auth', authRouter);
       app.use('/user', userRouter);
       app.use('/posts', postRouter);

@@ -51,9 +51,18 @@
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
       const res = await user.login(detail);
+<<<<<<< HEAD
       console.log(res);
       setScreen("Dashboard");
       window.location.replace("/");
+=======
+      if (res === "user does not exist") {
+        console.log("user does not exist");
+      } else {
+        setScreen("Dashboard");
+        window.location.replace('/');
+      }
+>>>>>>> 13f9492 (upload avatar)
     } catch (error) {
       console.log(error);
     }
