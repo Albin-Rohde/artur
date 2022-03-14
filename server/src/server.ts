@@ -37,7 +37,16 @@ const server = async () => {
           credentials: true,
         })
       );
-      app.use(morgan('dev'));
+      app.use(
+        /* Do not touch iti is for production
+         morgan('combined', {
+           skip: (_, res) => {
+             return res.statusCode ? res.statusCode < 400 : false;
+           },
+         })
+        */
+        morgan('dev')
+      );
       app.use(
         session({
           name: 'sid',
@@ -66,7 +75,7 @@ const server = async () => {
 
       app.use(
         fileUpload({
-          limits: { fileSize: 50 * 1024 * 1024 },
+          limits: { fileSize: 50 * 1024 * 1024 }, // ~~52Mb
           responseOnLimit: 'File size is too big',
           abortOnLimit: true,
           preserveExtension: true,

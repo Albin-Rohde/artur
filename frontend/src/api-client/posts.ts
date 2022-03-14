@@ -24,8 +24,6 @@ export class Post extends Client {
       type: "formData",
     });
 
-    console.log("id", id);
-
     if (!id) {
       throw new InternalServerError("No id in response");
     }
