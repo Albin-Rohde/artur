@@ -5,12 +5,17 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
+<<<<<<< HEAD
       - "${FRONT_PORT}:${FRONT_PORT}"
+=======
+      - "3000:3000"
+      - "35729:35729"
+>>>>>>> 12fd108 (changes to dashboard and profile)
     depends_on:
       - server
       - db
     volumes:
-    - ./frontend:/frontend
+      - ./frontend:/frontend
     links:
       - server
     env_file:
@@ -45,4 +50,3 @@ services:
     #   POSTGRES_USER: "${PG_USER}"
     #   POSTGRES_PASSWORD: "${PG_PASSWORD}"
     #   POSTGRES_DB: "${PG_DB}"
-
