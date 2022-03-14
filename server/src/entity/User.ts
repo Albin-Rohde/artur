@@ -37,7 +37,13 @@ export class User extends BaseEntity {
   @Column({ name: 'user_bio', type: 'varchar', length: '255', nullable: true })
   bio: string;
 
-  @Column({ name: 'followers', type: 'varchar', array: true, nullable: true })
+  @Column({
+    name: 'followers',
+    type: 'varchar',
+    array: true,
+    nullable: true,
+    default: [],
+  })
   followers: string[];
 
   @OneToMany(
