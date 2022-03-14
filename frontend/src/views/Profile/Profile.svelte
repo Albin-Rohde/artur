@@ -29,18 +29,11 @@
 
       <p>
         Hi! I'm Many. <br />
+        {currentUser.bio}
         xe/xim <br />
         Blue Lives Matter
       </p>
     </div>
-  </div>
-  <div class="profileMain">
-    <h2>{currentUser.name}</h2>
-    <p>
-      Hi! I'm Many. <br />
-      xe/xim <br />
-      Blue Lives Matter
-    </p>
   </div>
 </div>
 <br />
