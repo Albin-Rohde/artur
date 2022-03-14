@@ -26,12 +26,21 @@
     </div>
     <div class="profileMain">
       <h2>{currentUser.name}</h2>
+
       <p>
         Hi! I'm Many. <br />
         xe/xim <br />
         Blue Lives Matter
       </p>
     </div>
+  </div>
+  <div class="profileMain">
+    <h2>{currentUser.name}</h2>
+    <p>
+      Hi! I'm Many. <br />
+      xe/xim <br />
+      Blue Lives Matter
+    </p>
   </div>
 </div>
 <br />
@@ -69,9 +78,5 @@
 
   .profileMain {
     grid-column: 5/13;
-  }
-
-  .profileMain > h2 {
-    text-align: center;
   }
 </style>
