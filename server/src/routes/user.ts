@@ -26,7 +26,7 @@ userRouter.post('/bio', async (req, res) => {
     const user = await User.findOne(id);
 
     if (!user) {
-      return res.status(404).json('User not found');
+      return res.status(401).json('User not found');
     }
 
     await User.update({ id: user.id }, { bio });
@@ -46,38 +46,47 @@ userRouter.post('/follower/', async (req, res) => {
 
     const isUUID = regex.test(follower_id);
     if (!isUUID) {
-      return res.json('not a valid uuid');
+      return res.status(400).json('not a valid uuid');
     }
 
-    const [isUser, user] = await Promise.all([
+    const [userToFollow, currentUser] = await Promise.all([
       User.findOne(follower_id),
-      (User.findOne({ where: { id: userID } }) as unknown) as User,
+      (User.findOne({ where: { id: userID } }) as unknown) as Promise<User>,
     ]);
 
-    if (!isUser) {
-      return res.json('user not found');
+    if (!userToFollow) {
+      return res.status(401).json('user not found');
     }
 
-    if (typeof user.followers === 'undefined' || user.followers === null) {
+    if (
+      typeof currentUser.followers === 'undefined' ||
+      currentUser.followers === null
+    ) {
       await User.createQueryBuilder()
-        .where('id = :id', { id: user.id })
+        .where('id = :id', { id: currentUser.id })
         .update({ followers: [follower_id] })
         .execute();
-      return res.json({ user, message: 'user added to followers' });
+      return res.json({
+        user: currentUser,
+        message: 'user added to followers',
+      });
     } else {
-      if (user.followers.includes(follower_id)) {
+      if (currentUser.followers.includes(follower_id)) {
         return res.json('user already following');
       } else {
         await User.createQueryBuilder()
-          .where('id = :id', { id: user.id })
-          .update({ followers: [...user.followers, follower_id] })
+          .where('id = :id', { id: currentUser.id })
+          .update({ followers: [...currentUser.followers, follower_id] })
           .execute();
 
-        return res.json({ user, message: 'user added to followers' });
+        return res.json({
+          user: currentUser,
+          message: 'user added to followers',
+        });
       }
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -86,7 +95,7 @@ userRouter.post('/search', async (req, res) => {
     const { query } = req.body;
     const users = await User.getRepository().find({
       where: {
-        name: Like(`%${query}%`),
+        name: Like(`${query}%`),
       },
     });
     return res.json(users);
