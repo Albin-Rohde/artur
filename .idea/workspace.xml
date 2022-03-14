@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d5faec2d-59c0-48da-8c48-6f365b146fa6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api-client/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api-client/client.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/.env.schema" beforeDir="false" afterPath="$PROJECT_DIR$/server/.env.schema" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/server.ts" afterDir="false" />
+    <list default="true" id="d5faec2d-59c0-48da-8c48-6f365b146fa6" name="Changes" comment="fix review comments">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +16,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="23pqbhSMy1t7SRDpXusmQCcUeSz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

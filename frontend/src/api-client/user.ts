@@ -8,7 +8,6 @@ export class User extends Client {
     super();
   }
 
-
   public async register(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
     this.user = await this.makeRequest<IUser>({
