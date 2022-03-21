@@ -4,6 +4,7 @@ import path from 'path';
 import * as yup from 'yup';
 import { mediaTypes } from '../constants/MediaTypes';
 import { Post } from '../entity/Post';
+import loginRequired from '../middleware/login';
 import { predict } from '../util/color-predictor';
 
 const router = Router();
@@ -58,7 +59,7 @@ const filter = (
 
 const upload = multer({ storage, fileFilter: filter });
 
-router.post('/create/:id', async (req, res) => {
+router.post('/create/:id', loginRequired, async (req, res) => {
   try {
     const { userID } = req.session;
     const { id } = req.params;
@@ -102,9 +103,9 @@ router.post('/create/:id', async (req, res) => {
   }
 });
 
-router.post('/upload', upload.single('image'));
+router.post('/upload', loginRequired, upload.single('image'));
 
-router.post('/like', async (req, res) => {
+router.post('/like', loginRequired, async (req, res) => {
   const id = req.session.userID;
   try {
     const { postId } = req.body;
@@ -129,7 +130,7 @@ router.post('/like', async (req, res) => {
   }
 });
 
-router.get('likes', async (req, res) => {
+router.get('likes', loginRequired, async (req, res) => {
   const id = req.session.userID;
   try {
     const post = await Post.findOneOrFail(id);
@@ -148,7 +149,7 @@ router.get('likes', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', loginRequired, (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));

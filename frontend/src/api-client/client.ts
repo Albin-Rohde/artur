@@ -28,7 +28,7 @@ export class Client {
       action = action ? `/${action}` : "";
       query = query === undefined ? "" : `/?type=${query}`;
       console.log(data);
-      let res;
+      let res: Response;
       if (type === "json") {
         res = await fetch(`${this.baseUrl}/${route}${action}${query}`, {
           method,
@@ -55,6 +55,9 @@ export class Client {
       }
       if (!res.ok) {
         throw new InternalServerError(resBody);
+      }
+      if (res.status >= 400) {
+        throw new InternalServerError("Something went wrong");
       }
       return resBody;
     } catch (error) {

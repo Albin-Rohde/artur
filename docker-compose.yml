@@ -5,7 +5,7 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
-      - "3000:3000"
+      - "${FRONT_PORT}:${FRONT_PORT}"
     depends_on:
       - server
       - db

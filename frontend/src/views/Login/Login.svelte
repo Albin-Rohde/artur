@@ -1,14 +1,20 @@
 <script lang="ts">
-import type { IUserRequest } from "../../api-client";
-import Button from "../../components/Button.svelte";
-   export let setScreen;
-   export let onLogin: (u: IUserRequest) => Promise<void>;
-  let email = "";
-  let password = "";
+  import type { IUserRequest } from "../../api-client";
+  import Button from "../../components/Button.svelte";
+  import GithubButton from "../../components/GithubButton.svelte";
+  import GoogleButton from "../../components/GoogleButton.svelte";
+  export let setScreen: any;
+  export let onLogin: (u: IUserRequest) => Promise<void>;
+  export let onGoogleLogin: () => Promise<void>;
+  export let onGithubLogin: () => Promise<void>;
+    let email = "";
+    let password = "";
 </script>
 
 <div class="site-container">
   <div class="login-container">
+    <GoogleButton onClick={() => onGoogleLogin()} />
+    <GithubButton onClick={() => onGithubLogin()}  />
     <h2>Login to your account</h2>
     <br />
 
