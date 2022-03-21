@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { IUser,IUserRequest } from "./api-client";
+  import type { IUser, IUserRequest } from "./api-client";
   import { User } from "./api-client";
   import Navbar from "./components/Navbar.svelte";
-  import { signInWithGoogle,signOut,signUpWithGithub } from "./firebase";
+  import { signInWithGoogle, signOut, signUpWithGithub } from "./firebase";
   import Dashboard from "./views/Dashboard/Dashboard.svelte";
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
@@ -51,11 +51,9 @@
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
       const res = await user.login(detail);
-      if (res === "user does not exist") {
-        console.log("user does not exist");
-      } else {
-        setScreen("Dashboard");
-      }
+      console.log(res);
+      setScreen("Dashboard");
+      window.location.replace("/");
     } catch (error) {
       console.log(error);
     }
@@ -63,14 +61,18 @@
 
   const onGoogleLogin = async () => {
     const u = await signInWithGoogle();
-    console.log(user);
+    console.log(u);
     if (u) {
-      const idk = await user.socialLogin({name: u.name, email: u.email, avatar: u.avatar, provider: 'google'});
-      console.log(typeof idk);
-      if (typeof idk === "string") {
+      const socialUser = await user.socialLogin({
+        name: u.name,
+        email: u.email,
+        avatar: u.avatar,
+        provider: "google",
+      });
+      if (typeof socialUser === "string") {
         setScreen("Login");
       } else {
-        currentUser = idk;
+        currentUser = socialUser;
         setScreen("Dashboard");
       }
     }
@@ -80,28 +82,30 @@
     const u = await signUpWithGithub();
     console.log(u);
     if (u) {
-     const idk = await user.socialLogin({name: u.name, email: u.email, avatar: u.avatar, provider: 'github'});
-      console.log(typeof idk);
-      if (typeof idk === "string") {
+      const socialUser = await user.socialLogin({
+        name: u.name,
+        email: u.email,
+        avatar: u.avatar,
+        provider: "github",
+      });
+      if (typeof socialUser === "string") {
         setScreen("Login");
       } else {
-        currentUser = idk;
+        currentUser = socialUser;
         setScreen("Dashboard");
       }
-     console.log(idk);
-     if(typeof idk === "string") {
-       setScreen("Login");
-     } else {
-       currentUser = idk;
-       setScreen('Dashboard');
-     }
     }
   };
 
   const logout = async (u: IUser): Promise<void> => {
     try {
-      if (u.avatar && u.avatar.includes("googleusercontent") || u.avatar.includes("githubusercontent")) {
-        await signOut();
+      if (u.avatar) {
+        if (
+          u.avatar.includes("googleusercontent") ||
+          u.avatar.includes("githubusercontent")
+        ) {
+          await signOut();
+        }
       }
       await user.logout();
       currentUser = null;
@@ -119,7 +123,7 @@
   {#if screen === "Register"}
     <Register {setScreen} onRegister={register} />
   {:else if screen === "Login"}
-    <Login {setScreen} onLogin={login} onGoogleLogin={onGoogleLogin} onGithubLogin={onGithubLogin} />
+    <Login {setScreen} onLogin={login} {onGoogleLogin} {onGithubLogin} />
   {:else if screen === "Dashboard" && currentUser}
     <Dashboard {currentUser} onLogout={logout} />
   {/if}

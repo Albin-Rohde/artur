@@ -6,5 +6,7 @@
 *.secret
 yarn-error.log
 /server/post/*
+/server/avatars/*
 .env
 .idea*/
+.env

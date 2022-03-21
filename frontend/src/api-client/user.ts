@@ -55,7 +55,7 @@ export class User extends Client {
         provider,
       },
     });
-    console.log("user", this.user);
+    console.log("user 222222", this.user);
     return this.user;
   }
 
