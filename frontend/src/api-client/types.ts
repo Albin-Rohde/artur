@@ -5,7 +5,7 @@ export interface IUser {
   password: string;
   bio: string;
   followers: string[];
-  avatar?: string;
+  avatar: string | null;
 }
 
 export interface IPost {
@@ -20,13 +20,13 @@ export interface IPost {
 export interface IUserRequest {
   email: string;
   password: string;
-  name?: string;
+  name: string | null;
 }
 
 export interface IPostRequest {
-  post_description?: string;
-  post_title?: string;
-  file?: File;
+  post_description: string | null;
+  post_title: string | null;
+  file: File | null;
 }
 
 export type PostSortString = "color" | "likes" | "follower" | "time";

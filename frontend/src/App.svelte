@@ -62,19 +62,18 @@
 
   const onGoogleLogin = async () => {
     const u = await signInWithGoogle();
-    console.log(user);
+    console.log(u);
     if (u) {
-      const idk = await user.socialLogin({
+      const socialUser = await user.socialLogin({
         name: u.name,
         email: u.email,
         avatar: u.avatar,
         provider: "google",
       });
-      console.log(typeof idk);
-      if (typeof idk === "string") {
+      if (typeof socialUser === "string") {
         setScreen("Login");
       } else {
-        currentUser = idk;
+        currentUser = socialUser;
         setScreen("Dashboard");
       }
     }
@@ -84,24 +83,16 @@
     const u = await signUpWithGithub();
     console.log(u);
     if (u) {
-      const idk = await user.socialLogin({
+      const socialUser = await user.socialLogin({
         name: u.name,
         email: u.email,
         avatar: u.avatar,
         provider: "github",
       });
-      console.log(typeof idk);
-      if (typeof idk === "string") {
+      if (typeof socialUser === "string") {
         setScreen("Login");
       } else {
-        currentUser = idk;
-        setScreen("Dashboard");
-      }
-      console.log(idk);
-      if (typeof idk === "string") {
-        setScreen("Login");
-      } else {
-        currentUser = idk;
+        currentUser = socialUser;
         setScreen("Dashboard");
       }
     }
@@ -109,11 +100,13 @@
 
   const logout = async (u: IUser): Promise<void> => {
     try {
-      if (
-        (u.avatar && u.avatar.includes("googleusercontent")) ||
-        u.avatar.includes("githubusercontent")
-      ) {
-        await signOut();
+      if (u.avatar) {
+        if (
+          u.avatar.includes("googleusercontent") ||
+          u.avatar.includes("githubusercontent")
+        ) {
+          await signOut();
+        }
       }
       await user.logout();
       currentUser = null;

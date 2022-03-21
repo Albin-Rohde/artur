@@ -58,6 +58,9 @@ export class Client {
       if (!res.ok) {
         throw new InternalServerError(resBody);
       }
+      if (res.status >= 400) {
+        throw new InternalServerError("Something went wrong");
+      }
       return resBody;
     } catch (error) {
       console.error("we got an error!");
