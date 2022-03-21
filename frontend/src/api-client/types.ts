@@ -20,7 +20,7 @@ export interface IPost {
 export interface IUserRequest {
   email: string;
   password: string;
-  name: string | null;
+  name?: string;
 }
 
 export interface IPostRequest {

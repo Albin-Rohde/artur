@@ -144,11 +144,6 @@ authRouter.post('/social-login', async (req, res) => {
       user = await User.findOne({ name, email: `${provider}:${email}` });
     }
 
-    // const [userByEmail, userByName] = await Promise.all([
-    //   User.findOne({ email: email }),
-    //   User.findOne({ name: name }),
-    // ]);
-
     if (!user) {
       const socialUser = await User.create({
         name: name,

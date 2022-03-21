@@ -1,4 +1,5 @@
 import { Client } from "./client";
+import { InternalServerError } from "./errors";
 import type { IUser, IUserRequest } from "./types";
 
 export class User extends Client {
@@ -10,7 +11,7 @@ export class User extends Client {
 
   public async register(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
-    this.user = await this.makeRequest<IUser>({
+    const user = await this.makeRequest<IUser>({
       route: "auth",
       method: "post",
       action: "register",
@@ -20,17 +21,23 @@ export class User extends Client {
         password: data.password,
       },
     });
-    return this.user;
+    if (typeof user === "string") {
+      throw new InternalServerError(user);
+    }
+    return user;
   }
-  public async login(data: IUserRequest): Promise<IUser | string> {
+  public async login(data: IUserRequest): Promise<IUser> {
     console.log("data", data);
-    this.user = await this.makeRequest<IUser>({
+    const user = await this.makeRequest<IUser>({
       route: "auth",
       method: "post",
       action: "login",
       data,
     });
-    return this.user;
+    if (typeof user === "string") {
+      throw new InternalServerError(user);
+    }
+    return user;
   }
 
   public async socialLogin({
@@ -43,8 +50,8 @@ export class User extends Client {
     email: string;
     avatar: string;
     provider: "github" | "google";
-  }): Promise<IUser | string> {
-    this.user = await this.makeRequest<IUser>({
+  }): Promise<IUser> {
+    const user = await this.makeRequest<IUser>({
       route: "auth",
       method: "post",
       action: "social-login",
@@ -56,7 +63,10 @@ export class User extends Client {
       },
     });
     console.log("user 222222", this.user);
-    return this.user;
+    if (typeof user === "string") {
+      throw new InternalServerError(user);
+    }
+    return user;
   }
 
   public async logout(): Promise<void> {

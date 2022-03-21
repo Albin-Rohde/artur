@@ -7,6 +7,6 @@
 yarn-error.log
 /server/post/*
 /server/avatars/*
+/server/package-lock.json
 .env
 .idea*/
-.env
