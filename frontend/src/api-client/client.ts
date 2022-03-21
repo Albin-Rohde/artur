@@ -15,7 +15,6 @@ interface RestRequestOptions {
 
 export class Client {
   private readonly baseUrl: string = process["env"]["SERVER_URL"];
-  // private readonly baseUrl: string = "http://localhost:666";
 
   public async makeRequest<T>({
     method,
@@ -25,7 +24,6 @@ export class Client {
     query,
     type = "json",
   }: RestRequestOptions): Promise<T> {
-    console.log(process);
     try {
       action = action ? `/${action}` : "";
       query = query === undefined ? "" : `/?type=${query}`;

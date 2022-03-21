@@ -7,10 +7,14 @@
 yarn-error.log
 /server/post/*
 /server/avatars/*
+/server/package-lock.json
 .env
 .idea*/
+<<<<<<< HEAD
 .env
 <<<<<<< HEAD
 .idea
 =======
 >>>>>>> c0b5d23 (fix pr comments)
+=======
+>>>>>>> cea6df1 (finish pr comments)

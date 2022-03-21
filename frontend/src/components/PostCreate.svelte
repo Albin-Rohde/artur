@@ -1,5 +1,4 @@
 <script lang="ts">
-  // import Dropzone from 'svelte-file-dropzone';
   import Dropzone from "svelte-atoms/DropZone.svelte";
   import type { IUser } from "../api-client";
   import { Post } from "../api-client";
