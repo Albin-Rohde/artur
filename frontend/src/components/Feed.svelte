@@ -19,7 +19,7 @@ import type { PostSortString } from "../api-client/types";
     <div class="feed">
         {#if posts.length > 0}
             {#each posts as post}
-                <div style="background-image: url({post.photoUrl});background-size: auto; background-repeat: no-repeat;"></div>
+                <div style="background-image: url({post.photoUrl});background-size: cover; background-repeat: no-repeat;"></div>
             {/each}
         {/if}
     </div>

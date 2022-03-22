@@ -5,12 +5,7 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
-<<<<<<< HEAD
       - "${FRONT_PORT}:${FRONT_PORT}"
-=======
-      - "3000:3000"
-      - "35729:35729"
->>>>>>> 12fd108 (changes to dashboard and profile)
     depends_on:
       - server
       - db

@@ -7,10 +7,16 @@
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
   import Profile from "./views/Profile/Profile.svelte";
+  import EditProfile from "./views/EditProfile/EditProfile.svelte";
 
   // console.log(process);
 
-  type ScreenType = "Register" | "Login" | "Dashboard" | "Profile";
+  type ScreenType =
+    | "Register"
+    | "Login"
+    | "Dashboard"
+    | "Profile"
+    | "EditProfile";
 
   let screen = "Register";
 
@@ -122,13 +128,21 @@
     setScreen("Dashboard");
   };
 
+  const setProfileEdit = () => {
+    setScreen("EditProfile");
+  };
+
   console.log(screen);
 
   console.log(screen);
 </script>
 
 <main>
-  <Navbar onClick1={setProfile} onClick2={setDashboard} />
+  <Navbar
+    onClick1={setProfile}
+    onClick2={setDashboard}
+    onClick3={setProfileEdit}
+  />
   {#if screen === "Register"}
     <Register {setScreen} onRegister={register} />
   {:else if screen === "Login"}
@@ -137,6 +151,8 @@
     <Dashboard {currentUser} onLogout={logout} />
   {:else if screen === "Profile" && currentUser}
     <Profile {currentUser} onLogout={logout} />
+  {:else if screen === "EditProfile" && currentUser}
+    <EditProfile {currentUser} />
   {/if}
 </main>
 
