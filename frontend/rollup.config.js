@@ -58,40 +58,6 @@ export default {
     // a separate file - better for performance
     css({ output: "bundle.css" }),
 
-<<<<<<< HEAD
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration -
-		// consult the documentation for details:
-		// https://github.com/rollup/plugins/tree/master/packages/commonjs
-		resolve({
-			browser: true,
-			dedupe: ['svelte']
-		}),
-		commonjs(),
-		typescript({
-			sourceMap: !production,
-			inlineSources: !production
-		}),
-		replace({
-			preventAssignment: true,
-			"process.env.NODE_ENV": process.env.NODE_ENV,
-			// globalThis: {
-			// 	"process.env.NODE_ENV": process.env.NODE_ENV
-			// },
-			process: JSON.stringify({
-				hello: 'world',
-				SERVER_URL: 'hello',
-				FRONT_URL: 'hello',
-				env: {
-					SERVER_URL: process.env.SERVER_URL || 'http://localhost:5000',
-					FRONT_PORT: process.env.FRONT_PORT || '3000',
-					NODE_ENV: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
-					// FRONT_URL: Process.env.FRONT_URL,
-				}
-			}),
-		}),
-=======
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
     // some cases you'll need additional configuration -
@@ -108,6 +74,10 @@ export default {
     }),
     replace({
       preventAssignment: true,
+      "process.env.NODE_ENV": process.env.NODE_ENV,
+      // globalThis: {
+      // 	"process.env.NODE_ENV": process.env.NODE_ENV
+      // },
       process: JSON.stringify({
         hello: "world",
         SERVER_URL: "hello",
@@ -115,11 +85,11 @@ export default {
         env: {
           SERVER_URL: process.env.SERVER_URL,
           FRONT_PORT: process.env.FRONT_PORT,
+          NODE_ENV: process.env.NODE_ENV ? process.env.NODE_ENV : "development",
           // FRONT_URL: Process.env.FRONT_URL,
         },
       }),
     }),
->>>>>>> 12fd108 (changes to dashboard and profile)
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated

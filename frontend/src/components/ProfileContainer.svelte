@@ -1,66 +1,57 @@
 <script lang="ts">
-    import type { IUser } from "../api-client";
+  import type { IUser } from "../api-client";
 
-    export let currentUser: IUser;
-
-
+  export let currentUser: IUser;
 </script>
 
-<br>
+<br />
 <div class="profileContainer">
-    <div class="profile">
-        <div class="profilePicture">
-            <div></div>
-        </div>
-        <div class="profileMain">
-            <h2>{currentUser.name}</h2>
-
-            <textarea readonly class="bio">{currentUser.bio}</textarea>
-        </div>
+  <div class="profile">
+    <div class="profilePicture">
+      <div />
     </div>
+    <div class="profileMain">
+      <h2>{currentUser.name}</h2>
+
+      <textarea readonly class="bio">{currentUser.bio}</textarea>
+    </div>
+  </div>
 </div>
 
-
 <style>
-textarea{
-    resize: none;  
-}
+  textarea {
+    resize: none;
+  }
 
-.profileContainer{
+  .profileContainer {
     display: grid;
-    grid-template-columns: repeat(12,1fr);  
-
-}
-.profile{
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .profile {
     height: 15vh;
     grid-column: 3/11;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-
-}
-.profilePicture{
+  }
+  .profilePicture {
     grid-column: 2/4;
-}
+  }
 
-.profilePicture > div{
+  .profilePicture > div {
     width: 15vh;
     height: 15vh;
     border-radius: 50%;
     background-size: cover;
     background-image: url("https://preview.redd.it/1nox7mat7l781.jpg?auto=webp&s=89ccd4638a8c1452c0000bd884d18e0366ee1232");
+  }
 
-}
-
-.profileMain{
+  .profileMain {
     grid-column: 5/13;
-}
-.bio{
+  }
+  .bio {
     height: 10vh;
     width: 100%;
     border: none;
     outline: none;
-    
-}
-
-
+  }
 </style>
