@@ -10,15 +10,18 @@ const predict = async (url: string): Promise<string> => {
     const green: number[] = [];
     const blue: number[] = [];
 
-    const image = await Jimp.read(url);
+    const image = await Jimp.read(url, (err, img) => {
+      if (err) {
+        throw err;
+      }
+      return img;
+    });
 
     image.cover(
       224,
       224,
       Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE
     );
-
-    console.log(image.getMIME());
 
     image.scan(0, 0, image.bitmap.width, image.bitmap.height, (x, y, _) => {
       const pixel = Jimp.intToRGBA(image.getPixelColor(x, y));

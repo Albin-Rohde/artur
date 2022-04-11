@@ -125,7 +125,7 @@
   {:else if screen === "Login"}
     <Login {setScreen} onLogin={login} {onGoogleLogin} {onGithubLogin} />
   {:else if screen === "Dashboard" && currentUser}
-    <Dashboard {currentUser} onLogout={logout} />
+    <Dashboard {currentUser} onLogout={(user) => logout(user)} />
   {/if}
 </main>
 

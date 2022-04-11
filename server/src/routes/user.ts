@@ -1,9 +1,56 @@
 import { Router } from 'express';
+import { UploadedFile } from 'express-fileupload';
+import * as path from 'path';
 import { Like } from 'typeorm';
 import { User } from '../entity/User';
 import loginRequired from '../middleware/login';
 
 const userRouter = Router();
+
+userRouter.post('/upload', loginRequired, async (req, res) => {
+  try {
+    if (!req.files) {
+      return res.json({
+        status: false,
+        message: 'No file uploaded',
+      });
+    }
+
+    if (!req.files.avatar) {
+      return res.json({
+        status: false,
+        message: 'Not sufficient data',
+      });
+    }
+    let avatar = req.files.avatar as UploadedFile;
+
+    await avatar.mv(`./avatars/${avatar.md5}${path.extname(avatar.name)}`);
+
+    await User.update(
+      { id: req.session.userID },
+      {
+        avatar: `${req.protocol}://${req.hostname}:${
+          process.env.SERVER_PORT
+        }/user/avatars/${avatar.md5}${path.extname(avatar.name)}`,
+      }
+    );
+    return res.json({
+      status: true,
+      message: 'File uploaded',
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: error,
+    });
+  }
+});
+
+userRouter.get('/avatars/:id', loginRequired, (req, res) => {
+  const { id } = req.params;
+
+  return res.sendFile(path.join(__dirname, `../../avatars/${id}`));
+});
 
 userRouter.get('/', async (req, res) => {
   if (!req.session.userID) {
@@ -104,5 +151,14 @@ userRouter.post('/search', loginRequired, async (req, res) => {
     return res.status(500).json(error);
   }
 });
+
+userRouter.get('/hej123', (req, res) => {
+  res.send('jaa');
+});
+// userRouter.post('/avatar', (req, res) => {
+//   console.log(req.body);
+//   console.log(req.file);
+//   res.send('ok');
+// });
 
 export default userRouter;

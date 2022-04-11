@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import multer from 'multer';
+import { UploadedFile } from 'express-fileupload';
 import path from 'path';
 import * as yup from 'yup';
-import { mediaTypes } from '../constants/MediaTypes';
 import { Post } from '../entity/Post';
 import loginRequired from '../middleware/login';
 import { predict } from '../util/color-predictor';
@@ -19,45 +18,6 @@ const postShcema = yup.object().shape({
     .min(0)
     .max(255),
 });
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(null, 'post');
-  },
-  filename: async (req, file, cb) => {
-    const id = req.session.userID;
-    if (!id) {
-      throw new Error('No user id');
-    } else {
-      const date = Date.now();
-      const inserts = await Post.create({
-        photoUrl: `${req.protocol}://${req.hostname}:${
-          process.env.SERVER_PORT
-        }/posts/${date}${path.extname(file.originalname)}`,
-        createdAt: date.toString(),
-        ownerId: id,
-      }).save();
-      console.log(inserts);
-      req.res?.json(inserts.id);
-      cb(null, date + path.extname(file.originalname));
-    }
-    // const id = req.query.id;
-  },
-});
-
-const filter = (
-  _: Express.Request,
-  file: Express.Multer.File,
-  cb: (error: null, idk: boolean) => void
-) => {
-  if (mediaTypes.includes(file.mimetype) || Number(file.size) < 100000) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-const upload = multer({ storage, fileFilter: filter });
 
 router.post('/create/:id', loginRequired, async (req, res) => {
   try {
@@ -103,7 +63,49 @@ router.post('/create/:id', loginRequired, async (req, res) => {
   }
 });
 
-router.post('/upload', loginRequired, upload.single('image'));
+router.post('/upload', loginRequired, async (req, res) => {
+  try {
+    const id = req.session.userID;
+    if (!req.files) {
+      return res.json({
+        status: false,
+        message: 'No file uploaded',
+      });
+    }
+    const file = req.files.image as UploadedFile;
+    if (!file) {
+      return res.json({
+        status: false,
+        message: 'Not sufficient data',
+      });
+    }
+
+    await file.mv(`./post/${file.md5}${path.extname(file.name)}`);
+
+    const post = await Post.create({
+      photoUrl: `${req.protocol}://${req.hostname}:${
+        process.env.SERVER_PORT
+      }/posts/${file.md5}${path.extname(file.name)}`,
+      createdAt: Date.now().toString(),
+      ownerId: id,
+    }).save();
+
+    return res.json(post.id);
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: error,
+    });
+  }
+
+  // const inserts = await Post.create({
+  //   photoUrl: `${req.protocol}://${req.hostname}:${
+  //     process.env.SERVER_PORT
+  //   }/posts/${date}${path.extname(file.originalname)}`,
+  //   createdAt: date.toString(),
+  //   ownerId: id,
+  // }).save();
+});
 
 router.post('/like', loginRequired, async (req, res) => {
   const id = req.session.userID;
@@ -149,7 +151,7 @@ router.get('likes', loginRequired, async (req, res) => {
   }
 });
 
-router.get('/:id', loginRequired, (req, res) => {
+router.get('/:id', (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));
