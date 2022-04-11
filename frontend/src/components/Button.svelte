@@ -12,8 +12,8 @@
     align-items: center;
     border-radius: 5px;
     background: #add5a9;
-    width: 200px;
-    height: 30px;
+    width: 8vw;
+    height: 3vh;
   }
   .knapp:hover {
     background: #96cb92;

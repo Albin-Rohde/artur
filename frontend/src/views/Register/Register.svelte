@@ -37,10 +37,9 @@
     />
     <br />
     <p>
-      Already have an account? <a
-        class="link"
-        on:click={() => setScreen("Login")}>Log in</a
-      >
+      <!-- svelte-ignore a11y-missing-attribute -->
+      Already have an account?
+      <a class="link" on:click={() => setScreen("Login")}>Log in</a>
     </p>
   </div>
 </div>

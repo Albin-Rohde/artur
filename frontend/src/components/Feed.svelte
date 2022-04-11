@@ -3,6 +3,8 @@
   import { Post } from "../api-client";
   import type { PostSortString } from "../api-client/types";
   export let feedType: PostSortString;
+  let post_description: string;
+  let post_title: string;
   let posts: IPost[] = [];
 
   (async () => {
@@ -18,7 +20,7 @@
     {#if posts.length > 0}
       {#each posts as post}
         <div
-          style="background-image: url({post.photoUrl});background-size: cover; background-repeat: no-repeat;"
+          style="background-image: url({post.photoUrl});background-size: contain; background-repeat: no-repeat;"
         />
       {/each}
     {/if}

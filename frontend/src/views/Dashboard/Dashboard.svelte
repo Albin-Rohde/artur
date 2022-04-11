@@ -6,16 +6,22 @@
   import Button from "../../components/Button.svelte";
   import PostCreate from "../../components/PostCreate.svelte";
   import Feed from "../../components/Feed.svelte";
+  import type { PostSortString } from "../../api-client/types";
   export let currentUser: IUser;
   export let onLogout: (u: IUser) => Promise<void>;
   console.log(currentUser);
   const scrollY = document.body.style.top;
   let postCreation = "";
-  let post_description: string;
-  let post_title: string;
   let file: FileList;
   let posts: IPost[] = [];
+  let feedType: PostSortString = "time";
   const user = new User();
+  const feedTypes = ["time", "color", "follower", "likes"];
+
+  const setFeedType = (e) => {
+    feedType = feedTypes[e.target.options.selectedIndex] as PostSortString;
+    console.log(feedType);
+  };
 
   const showPostCreate = () => {
     postCreation = "Visible";
@@ -26,12 +32,6 @@
     postCreation = "";
     document.body.style.position = "";
     document.body.style.top = "";
-  };
-
-  const uploadAvatar = async () => {
-    console.log(file[0]);
-    const avatar = await user.uploadAvatar(file[0]);
-    console.log(avatar);
   };
 
   (async () => {
@@ -53,5 +53,23 @@
 {:else}
   <PlusButton onClick={() => showPostCreate()} />
 {/if}
+<div class="feedTypeContainer">
+  <label for="feedType" />
+  <select name="feedTpe" id="feedType" on:change={setFeedType}>
+    <option value="time">Time</option>
+    <option value="color">Color</option>
+    <option value="follower">Follower</option>
+    <option value="likes">Likes</option>
+  </select>
+</div>
+<Feed {feedType} />
 
-<Feed feedType="time" />
+<style>
+  .feedTypeContainer {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  #feedType {
+    grid-column: 10/11;
+  }
+</style>

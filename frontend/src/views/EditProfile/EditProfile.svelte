@@ -2,39 +2,64 @@
   import { User } from "../../api-client";
   import type { IUser } from "../../api-client";
   import ProfileContainer from "../../components/ProfileContainer.svelte";
+  import Dropzone from "svelte-atoms/DropZone.svelte";
   export let currentUser: IUser;
 
-  let profile_description: string;
-  let profile_name: string;
-  let file: FileList;
+  let profile_description: string = currentUser.bio;
+  let profile_name: string = currentUser.name;
+  let file: File;
+  let file_name: string;
+  let image;
+
   const user = new User();
 
-  profile_name = currentUser.name;
-  profile_description = currentUser.bio;
-
+  let reader = new FileReader();
+  const uploadAvatar = async () => {
+    console.log(file[0]);
+    const avatar = await user.uploadAvatar(file[0]);
+    console.log(avatar);
+  };
+  const fileChose = (e) => {
+    const f = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+    console.log(f);
+    if (f) {
+      reader.addEventListener("load", () => {
+        image = reader.result;
+      });
+      reader.readAsDataURL(f);
+      file = f;
+      file_name = f.name;
+    }
+  };
   const upload = async () => {
     console.log(profile_description, profile_name, file[0]);
-    const p = await user
-      .avatar
-      // profile_description,
-      // profile_name,
-      // file: file[0]
-      ();
-    console.log(p);
-    window.location.replace("/");
   };
 </script>
 
 <ProfileContainer {currentUser} />
+<br />
 <div class="formContainer">
   <form class="form" action="">
-    <input class="file" type="file" name="file" bind:files={file} />
+    {#if image}
+      <img src={image} alt="hello" class="file" />
+    {:else}
+      <div class="drop">
+        <Dropzone
+          class="drop"
+          fileTitle={file_name}
+          dropOnPage
+          on:drop={fileChose}
+          on:change={fileChose}
+        />
+      </div>
+    {/if}
+
     <textarea
       class="name"
       type="text"
       name="name"
       bind:value={profile_name}
-      placeholder="Title"
+      placeholder="Name"
     />
     <textarea
       class="description"
@@ -53,6 +78,7 @@
   .formContainer {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(150, auto);
   }
 
   .form {
@@ -60,9 +86,10 @@
     grid-column: 3/11;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
   }
   .name {
-    grid-row: 2/3;
+    grid-row: 1/2;
     grid-column: 8/13;
     background-color: white;
     border-radius: 30px;
@@ -70,7 +97,7 @@
   }
 
   .description {
-    grid-row: 3/9;
+    grid-row: 2/4;
     grid-column: 8/13;
     background-color: white;
     border-radius: 30px;
@@ -78,5 +105,42 @@
   }
   textarea {
     resize: none;
+  }
+  .drop {
+    grid-column: 2/5;
+    grid-row: 1/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid gray 1px;
+    border-radius: 30px;
+  }
+  .file {
+    width: 15vh;
+    height: 15vh;
+    grid-row: 2/4;
+    grid-column: 2/4;
+
+    background-color: white;
+    border-radius: 50%;
+    background-size: cover;
+  }
+  .knapp {
+    grid-row: 4/5;
+    grid-column: 8/13;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background: #add5a9;
+    width: 8vw;
+    height: 3vh;
+    justify-self: right;
+  }
+  .knapp:hover {
+    background: #96cb92;
+  }
+  .knapp:focus {
+    background: #d6a7b4;
   }
 </style>

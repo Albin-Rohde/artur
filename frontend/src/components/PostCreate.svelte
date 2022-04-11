@@ -30,7 +30,6 @@
   let image;
 
   const fileChose = (e) => {
-    console.log(e.dataTransfer.files);
     const f = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
     console.log(f);
     if (f) {
@@ -67,15 +66,17 @@
       placeholder="Content"
     />
     <!-- <Dropzone on:drop={fileChose} /> -->
-    <Dropzone
-      class="drop"
-      fileTitle={file_name}
-      dropOnPage
-      on:drop={fileChose}
-      on:change={fileChose}
-    />
     {#if image}
       <img src={image} alt="hello" class="file" />
+    {:else}
+      <div class="drop">
+        <Dropzone
+          fileTitle={file_name}
+          dropOnPage
+          on:drop={fileChose}
+          on:change={fileChose}
+        />
+      </div>
     {/if}
     <button class="knapp" on:click|preventDefault={() => upload()}
       >{"Create Post"}
@@ -90,9 +91,13 @@
   }
 
   .drop {
+    grid-row: 2/12;
+    grid-column: 2/7;
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 5%;
   }
 
   .background {
@@ -144,7 +149,7 @@
     grid-row: 2/12;
     grid-column: 2/7;
     background-color: white;
-    border-radius: 30px;
+    border-radius: 2%;
   }
   .knapp {
     overflow: visible;
