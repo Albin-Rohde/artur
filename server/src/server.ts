@@ -37,7 +37,16 @@ const server = async () => {
           credentials: true,
         })
       );
-      app.use(morgan('dev'));
+      app.use(
+        /* Do not touch this is for production
+         morgan('combined', {
+           skip: (_, res) => {
+             return res.statusCode ? res.statusCode < 400 : false;
+           },
+         })
+        */
+        morgan('dev')
+      );
       app.use(
         session({
           name: 'sid',
@@ -55,7 +64,7 @@ const server = async () => {
       app.use(
         rateLimit({
           windowMs: 15 * 60 * 1000, // 15 minutes
-          max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+          max: 750, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
           message:
             'Too many request  from this IP, please try again after some time',
           standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
@@ -66,7 +75,7 @@ const server = async () => {
 
       app.use(
         fileUpload({
-          limits: { fileSize: 50 * 1024 * 1024 },
+          limits: { fileSize: 50 * 1024 * 1024 }, // ~~52Mb
           responseOnLimit: 'File size is too big',
           abortOnLimit: true,
           preserveExtension: true,

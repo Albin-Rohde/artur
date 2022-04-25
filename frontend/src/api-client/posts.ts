@@ -24,8 +24,6 @@ export class Post extends Client {
       type: "formData",
     });
 
-    console.log("id", id);
-
     if (!id) {
       throw new InternalServerError("No id in response");
     }
@@ -48,5 +46,14 @@ export class Post extends Client {
       method: "get",
       query,
     }).then((r) => r.posts);
+  }
+
+  public async getMyPost(query: PostSortString): Promise<IPost[]> {
+    return await this.makeRequest<IPost[]>({
+      route: "feed",
+      action: "my",
+      method: "get",
+      query,
+    });
   }
 }

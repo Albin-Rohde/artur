@@ -17,18 +17,27 @@
     | "Dashboard"
     | "Profile"
     | "EditProfile";
+  import AddUser from "./views/User/AddUser.svelte";
+
+  // console.log(process);
+
+  type ScreenType = "Register" | "Login" | "Dashboard" | "AddUser";
 
   let screen = "Register";
 
   const user = new User();
 
-  let currentUser: IUser = null;
+  let currentUser: IUser | null = null;
 
   const getSession = async () => {
     try {
       currentUser = await user.getSession();
       if (currentUser) {
         setScreen("Dashboard");
+      console.log(currentUser);
+      if (currentUser) {
+        const s = localStorage.getItem("screen") || "Dashboard";
+        setScreen(s as ScreenType);
       }
     } catch (err) {
       // do some erorr display,
@@ -40,6 +49,7 @@
   // console.log(global)
   const setScreen = (scream: ScreenType) => {
     screen = scream;
+    localStorage.setItem("screen", scream);
   };
 
   const register = async (detail: IUserRequest) => {
@@ -58,6 +68,7 @@
   const login = async (detail: IUserRequest): Promise<void> => {
     try {
       const res = await user.login(detail);
+      console.log(res);
       setScreen("Dashboard");
       window.location.replace("/");
     } catch (error) {
@@ -135,7 +146,6 @@
   console.log(screen);
 
   console.log(screen);
-</script>
 
 <main>
   <Navbar
@@ -143,6 +153,10 @@
     onClick2={setDashboard}
     onClick3={setProfileEdit}
   />
+<main>
+  {#if currentUser && (screen === "Dashboard" || screen === "AddUser")}
+    <Navbar {setScreen} user={currentUser} />
+  {/if}
   {#if screen === "Register"}
     <Register {setScreen} onRegister={register} />
   {:else if screen === "Login"}
@@ -153,6 +167,9 @@
     <Profile {currentUser} onLogout={logout} />
   {:else if screen === "EditProfile" && currentUser}
     <EditProfile {currentUser} />
+    <Dashboard {currentUser} onLogout={(user) => logout(user)} />
+  {:else if screen === "AddUser" && currentUser}
+    <AddUser {currentUser} />
   {/if}
 </main>
 

@@ -22,6 +22,17 @@ userRouter.post('/upload', loginRequired, async (req, res) => {
         message: 'Not sufficient data',
       });
     }
+
+    const user = await User.findOne(req.session.userID);
+
+    if (
+      user?.avatar &&
+      (user.avatar.includes('googleusercontent') ||
+        user.avatar.includes('githubusercontent'))
+    ) {
+      return res.status(401).json("You can't change your avatar");
+    }
+
     let avatar = req.files.avatar as UploadedFile;
 
     await avatar.mv(`./avatars/${avatar.md5}${path.extname(avatar.name)}`);
@@ -141,11 +152,14 @@ userRouter.post('/follower/', loginRequired, async (req, res) => {
 userRouter.post('/search', loginRequired, async (req, res) => {
   try {
     const { query } = req.body;
-    const users = await User.getRepository().find({
+    let users: User[] = await User.getRepository().find({
       where: {
         name: Like(`${query}%`),
       },
     });
+
+    users = users.filter(user => user.id !== req.session.userID);
+
     return res.json(users);
   } catch (error) {
     return res.status(500).json(error);

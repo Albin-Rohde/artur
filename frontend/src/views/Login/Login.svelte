@@ -13,6 +13,8 @@
 
 <div class="site-container">
   <div class="login-container">
+    <GoogleButton onClick={() => onGoogleLogin()} />
+    <GithubButton onClick={() => onGithubLogin()} />
     <h2>Login to your account</h2>
     <br />
 

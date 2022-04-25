@@ -30,6 +30,7 @@
   let image;
 
   const fileChose = (e) => {
+    console.log(e.dataTransfer.files);
     const f = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
     console.log(f);
     if (f) {
