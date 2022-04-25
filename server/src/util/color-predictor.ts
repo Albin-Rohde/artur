@@ -1,21 +1,21 @@
+import fs from 'fs';
 import Jimp from 'jimp';
+import isImage from './is-image';
 
 const calcAvg = (arr: number[]) =>
   arr.reduce((acc, num) => acc + num, 0) / (arr.length - 1);
 
-const predict = async (url: string): Promise<string> => {
+const predict = async (path: string): Promise<string | number> => {
   try {
+    if (!fs.existsSync(path) && !isImage(path)) {
+      return 2;
+    }
     let color = '';
     const red: number[] = [];
     const green: number[] = [];
     const blue: number[] = [];
 
-    const image = await Jimp.read(url, (err, img) => {
-      if (err) {
-        throw err;
-      }
-      return img;
-    });
+    const image = await Jimp.read(path);
 
     image.cover(
       224,
@@ -43,13 +43,13 @@ const predict = async (url: string): Promise<string> => {
     } else if (blueavg > redavg && blueavg > greeenavg) {
       color = 'blue';
     } else {
-      throw Error('something went wrong');
+      return 1;
     }
 
     return color;
   } catch (error) {
     console.log(error);
-    return 'something went wrong';
+    return 1;
   }
 };
 

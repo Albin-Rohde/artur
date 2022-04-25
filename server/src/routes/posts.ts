@@ -38,11 +38,16 @@ router.post('/create/:id', loginRequired, async (req, res) => {
     if (post?.ownerId !== userID) {
       throw new Error('Not your post');
     }
+    console.log(
+      path.join(__dirname, `../../post/${post?.photoUrl.split('/')[4]}`)
+    );
 
-    const color = await predict(post?.photoUrl as string);
+    const color = await predict(
+      path.join(__dirname, `../../post/${post?.photoUrl.split('/')[4]}`)
+    );
     console.log(color);
 
-    if (!(color === 'something went wrong')) {
+    if (typeof color !== 'number') {
       await Post.update(
         { id },
         { title: post_title, description: post_description, color }
@@ -97,14 +102,6 @@ router.post('/upload', loginRequired, async (req, res) => {
       message: error,
     });
   }
-
-  // const inserts = await Post.create({
-  //   photoUrl: `${req.protocol}://${req.hostname}:${
-  //     process.env.SERVER_PORT
-  //   }/posts/${date}${path.extname(file.originalname)}`,
-  //   createdAt: date.toString(),
-  //   ownerId: id,
-  // }).save();
 });
 
 router.post('/like', loginRequired, async (req, res) => {
@@ -135,7 +132,7 @@ router.post('/like', loginRequired, async (req, res) => {
 router.get('likes', loginRequired, async (req, res) => {
   const id = req.session.userID;
   try {
-    const post = await Post.findOneOrFail(id);
+    const post = await Post.findOne({ where: { id } });
     if (!post) {
       return res.status(404).json('Post not found');
     }

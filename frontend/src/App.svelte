@@ -6,22 +6,25 @@
   import Dashboard from "./views/Dashboard/Dashboard.svelte";
   import Login from "./views/Login/Login.svelte";
   import Register from "./views/Register/Register.svelte";
+  import AddUser from "./views/User/AddUser.svelte";
 
   // console.log(process);
 
-  type ScreenType = "Register" | "Login" | "Dashboard";
+  type ScreenType = "Register" | "Login" | "Dashboard" | "AddUser";
 
   let screen = "Register";
 
   const user = new User();
 
-  let currentUser: IUser = null;
+  let currentUser: IUser | null = null;
 
   const getSession = async () => {
     try {
       currentUser = await user.getSession();
+      console.log(currentUser);
       if (currentUser) {
-        setScreen("Dashboard");
+        const s = localStorage.getItem("screen") || "Dashboard";
+        setScreen(s as ScreenType);
       }
     } catch (err) {
       // do some erorr display,
@@ -33,6 +36,7 @@
   // console.log(global)
   const setScreen = (scream: ScreenType) => {
     screen = scream;
+    localStorage.setItem("screen", scream);
   };
 
   const register = async (detail: IUserRequest) => {
@@ -119,13 +123,17 @@
 </script>
 
 <main>
-  <Navbar />
+  {#if currentUser && (screen === "Dashboard" || screen === "AddUser")}
+    <Navbar {setScreen} user={currentUser} />
+  {/if}
   {#if screen === "Register"}
     <Register {setScreen} onRegister={register} />
   {:else if screen === "Login"}
     <Login {setScreen} onLogin={login} {onGoogleLogin} {onGithubLogin} />
   {:else if screen === "Dashboard" && currentUser}
     <Dashboard {currentUser} onLogout={(user) => logout(user)} />
+  {:else if screen === "AddUser" && currentUser}
+    <AddUser {currentUser} />
   {/if}
 </main>
 

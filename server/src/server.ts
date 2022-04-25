@@ -38,7 +38,7 @@ const server = async () => {
         })
       );
       app.use(
-        /* Do not touch iti is for production
+        /* Do not touch this is for production
          morgan('combined', {
            skip: (_, res) => {
              return res.statusCode ? res.statusCode < 400 : false;
@@ -64,7 +64,7 @@ const server = async () => {
       app.use(
         rateLimit({
           windowMs: 15 * 60 * 1000, // 15 minutes
-          max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+          max: 750, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
           message:
             'Too many request  from this IP, please try again after some time',
           standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers

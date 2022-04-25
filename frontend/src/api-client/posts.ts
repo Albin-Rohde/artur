@@ -47,4 +47,13 @@ export class Post extends Client {
       query,
     }).then((r) => r.posts);
   }
+
+  public async getMyPost(query: PostSortString): Promise<IPost[]> {
+    return await this.makeRequest<IPost[]>({
+      route: "feed",
+      action: "my",
+      method: "get",
+      query,
+    });
+  }
 }
