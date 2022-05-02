@@ -5,11 +5,12 @@
 </script>
 
 <div class="box">
-  {user.id}
+  {user.name}
 </div>
 
 <style>
   .box {
     border: 1px solid;
+    border-radius: 20%;
   }
 </style>

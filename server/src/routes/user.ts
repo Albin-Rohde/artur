@@ -166,6 +166,23 @@ userRouter.post('/search', loginRequired, async (req, res) => {
   }
 });
 
+userRouter.post('/changeDisp', loginRequired, async (req, res) => {
+  try {
+    const { userID } = req.session;
+    const { displayName } = req.body;
+    if (!displayName || typeof displayName !== 'string') {
+      return res.status(400).json('please provide a displayName');
+    }
+
+    await User.update({ id: userID }, { displayName });
+
+    return res.json('OK');
+  } catch (e) {
+    console.error(e);
+    res.status(500).json((e as any).message);
+  }
+});
+
 userRouter.get('/hej123', (req, res) => {
   res.send('jaa');
 });

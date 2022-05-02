@@ -36,6 +36,7 @@
     console.log("hello");
     const postClient = new Post();
     posts = await postClient.getFeed("time");
+
     console.log(posts);
   })();
 </script>

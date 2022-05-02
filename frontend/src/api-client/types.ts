@@ -3,6 +3,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  displayName: string;
   bio: string;
   followers: string[];
   avatar: string | null;
@@ -21,6 +22,7 @@ export interface IUserRequest {
   email: string;
   password: string;
   name?: string;
+  displayName?: string;
 }
 
 export interface IPostRequest {

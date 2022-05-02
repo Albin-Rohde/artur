@@ -22,6 +22,11 @@ const registerSchema = yup.object().shape({
     .min(6)
     .max(255)
     .required(),
+  displayName: yup
+    .string()
+    .max(2)
+    .max(20)
+    .required(),
 });
 
 const loginSchema = yup.object().shape({
@@ -39,20 +44,24 @@ const loginSchema = yup.object().shape({
 
 authRouter.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, displayName } = req.body;
+    console.log(name, email, password, displayName);
     registerSchema.validateSync(
       {
         userName: name,
         userEmail: email,
         userPassword: password,
+        displayName: displayName,
       },
       { abortEarly: false }
     );
 
     const [userByEmail, userByName] = await Promise.all([
-      User.findOne({ email: email }),
-      User.findOne({ name: name }),
+      User.findOne({ where: { email } }),
+      User.findOne({ where: { name } }),
     ]);
+
+    console.log(userByEmail, userByName);
 
     if (userByEmail || userByName) {
       return res.json('This username or email is taken').status(300);
@@ -64,6 +73,7 @@ authRouter.post('/register', async (req, res) => {
       const newUser = await User.create({
         name: name,
         email: email,
+        displayName,
         password: hashedPw,
       }).save();
       req.session.userID = newUser.id;

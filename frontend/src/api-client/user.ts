@@ -19,6 +19,7 @@ export class User extends Client {
         name: data.name,
         email: data.email,
         password: data.password,
+        displayName: data.displayName,
       },
     });
     if (typeof user === "string") {
@@ -131,5 +132,16 @@ export class User extends Client {
       type: "formData",
     });
     return id;
+  }
+
+  public async changeDisplayName(displayName: string): Promise<string> {
+    return this.makeRequest({
+      route: "user",
+      method: "post",
+      action: "changeDisp",
+      data: {
+        displayName,
+      },
+    });
   }
 }

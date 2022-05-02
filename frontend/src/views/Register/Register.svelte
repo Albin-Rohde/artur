@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { IUserRequest } from '../../api-client';
+  import type { IUserRequest } from "../../api-client";
   import Button from "../../components/Button.svelte";
   export let setScreen;
-  export let onRegister: (u: IUserRequest) => void
+  export let onRegister: (u: IUserRequest) => void;
 
   let username = "";
+  let displayName = "";
   let email = "";
   let password = "";
-  
 </script>
 
 <div class="site-container">
@@ -22,6 +22,12 @@
     /><br />
     <input
       class="input-style"
+      type="text"
+      placeholder="displayName"
+      bind:value={displayName}
+    /><br />
+    <input
+      class="input-style"
       type="email"
       placeholder="email"
       bind:value={email}
@@ -32,15 +38,22 @@
       placeholder="password"
       bind:value={password}
     /><br />
-    <Button text="Create Account" onClick={() => onRegister({name: username, email, password})} ></Button>
-    <br>
-    <p > Already have an account?  <a class="link" on:click={()=> setScreen('Login')}>Log in</a></p>
-    </div>
+    <Button
+      text="Create Account"
+      onClick={() =>
+        onRegister({ name: username, email, password, displayName })}
+    />
+    <br />
+    <p>
+      Already have an account? <a
+        class="link"
+        on:click={() => setScreen("Login")}>Log in</a
+      >
+    </p>
+  </div>
 </div>
 
 <style>
-
-
   .site-container {
     padding: 0px;
     margin: 0px;
@@ -59,7 +72,7 @@
   .input-style {
     width: 80%;
   }
-  .link{
+  .link {
     cursor: pointer;
   }
 </style>

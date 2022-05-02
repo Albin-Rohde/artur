@@ -21,6 +21,15 @@ export class User extends BaseEntity {
   name: string;
 
   @Column({
+    name: 'user_display_name',
+    type: 'varchar',
+    length: '255',
+    nullable: false,
+    default: '',
+  })
+  displayName: string;
+
+  @Column({
     name: 'user_email',
     type: 'varchar',
     length: '255',
