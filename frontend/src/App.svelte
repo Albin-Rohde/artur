@@ -8,6 +8,7 @@
   import Register from "./views/Register/Register.svelte";
   import Profile from "./views/Profile/Profile.svelte";
   import EditProfile from "./views/EditProfile/EditProfile.svelte";
+  import AddUser from "./views/User/AddUser.svelte";
 
   // console.log(process);
 
@@ -16,40 +17,37 @@
     | "Login"
     | "Dashboard"
     | "Profile"
-    | "EditProfile";
-  import AddUser from "./views/User/AddUser.svelte";
+    | "EditProfile"
+    | "AddUser";
 
   // console.log(process);
-
-  type ScreenType = "Register" | "Login" | "Dashboard" | "AddUser";
-
-  let screen = "Register";
+  let screen: ScreenType = "Register";
 
   const user = new User();
 
   let currentUser: IUser | null = null;
-
-  const getSession = async () => {
-    try {
-      currentUser = await user.getSession();
-      if (currentUser) {
-        setScreen("Dashboard");
-      console.log(currentUser);
-      if (currentUser) {
-        const s = localStorage.getItem("screen") || "Dashboard";
-        setScreen(s as ScreenType);
-      }
-    } catch (err) {
-      // do some erorr display,
-      currentUser = null;
-    }
-  };
 
   window.onload = () => getSession();
   // console.log(global)
   const setScreen = (scream: ScreenType) => {
     screen = scream;
     localStorage.setItem("screen", scream);
+  };
+  const getSession = async () => {
+    try {
+      currentUser = await user.getSession();
+      if (currentUser) {
+        setScreen("Dashboard");
+        console.log(currentUser);
+        if (currentUser) {
+          const s = localStorage.getItem("screen") || "Dashboard";
+          setScreen(s as ScreenType);
+        }
+      }
+    } catch (err) {
+      // do some erorr display,
+      currentUser = null;
+    }
   };
 
   const register = async (detail: IUserRequest) => {
@@ -131,30 +129,10 @@
       console.log(err);
     }
   };
-
-  const setProfile = () => {
-    setScreen("Profile");
-  };
-  const setDashboard = () => {
-    setScreen("Dashboard");
-  };
-
-  const setProfileEdit = () => {
-    setScreen("EditProfile");
-  };
-
-  console.log(screen);
-
-  console.log(screen);
+</script>
 
 <main>
-  <Navbar
-    onClick1={setProfile}
-    onClick2={setDashboard}
-    onClick3={setProfileEdit}
-  />
-<main>
-  {#if currentUser && (screen === "Dashboard" || screen === "AddUser")}
+  {#if currentUser && (screen === "Dashboard" || screen === "EditProfile" || screen === "AddUser" || screen === "Profile")}
     <Navbar {setScreen} user={currentUser} />
   {/if}
   {#if screen === "Register"}

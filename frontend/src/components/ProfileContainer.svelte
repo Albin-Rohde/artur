@@ -7,9 +7,15 @@
 <br />
 <div class="profileContainer">
   <div class="profile">
-    <div class="profilePicture">
-      <div />
-    </div>
+    {#if !currentUser.avatar}
+      <div class="defaultProfile">
+        <img src="assets/avatar.png" alt="" />
+      </div>
+    {:else}
+      <div class="profilePicture">
+        <img src={currentUser.avatar} alt="" />
+      </div>
+    {/if}
     <div class="profileMain">
       <h2>{currentUser.name}</h2>
 
@@ -36,15 +42,22 @@
   .profilePicture {
     grid-column: 2/4;
   }
-
-  .profilePicture > div {
+  .defaultProfile {
+    grid-column: 2/4;
+  }
+  .defaultProfile > img {
     width: 15vh;
     height: 15vh;
     border-radius: 50%;
     background-size: cover;
-    background-image: url("https://preview.redd.it/1nox7mat7l781.jpg?auto=webp&s=89ccd4638a8c1452c0000bd884d18e0366ee1232");
   }
 
+  .profilePicture > img {
+    width: 15vh;
+    height: 15vh;
+    border-radius: 50%;
+    background-size: cover;
+  }
   .profileMain {
     grid-column: 5/13;
   }

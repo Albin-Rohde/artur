@@ -15,8 +15,8 @@
 
   let reader = new FileReader();
   const uploadAvatar = async () => {
-    console.log(file[0]);
-    const avatar = await user.uploadAvatar(file[0]);
+    console.log(file);
+    const avatar = await user.uploadAvatar(file);
     console.log(avatar);
   };
   const fileChose = (e) => {
@@ -33,6 +33,8 @@
   };
   const upload = async () => {
     console.log(profile_description, profile_name, file[0]);
+    uploadAvatar();
+    user.bio(profile_description);
   };
 </script>
 

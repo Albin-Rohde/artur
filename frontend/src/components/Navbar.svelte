@@ -1,21 +1,16 @@
 <script lang="ts">
-  export let onClick1: (...a: any) => any;
-  export let onClick2: (...a: any) => any;
-  export let onClick3: (...a: any) => any;
+  export let setScreen: (_: string) => void;
+  export let user: IUser;
   import {
     Dropdown,
-    DropdownItem,
-    DropdownMenu,
     DropdownToggle,
-    Styles,
+    DropdownMenu,
+    DropdownItem,
   } from "sveltestrap";
   import { User } from "../api-client";
   import type { IUser } from "../api-client/types";
 
   const u = new User();
-  export let setScreen: (_: string) => void;
-
-  export let user: IUser;
 
   (() => {
     console.log("u", user);
@@ -23,31 +18,24 @@
 </script>
 
 <div class="navbar">
-  <div class="avatar-container" on:click|preventDefault={onClick1}>
-    <img src="assets/avatar.png" alt="*_*" class="avatar" />
-  </div>
-  <div class="logo-container" on:click|preventDefault={onClick2}>
-    <img src="assets/text.png" alt="*_*" class="logo" />
-  </div>
-  <div class="burgir-container" on:click|preventDefault={onClick3}>
-    <img src="assets/hamburger.png" alt="*_*" class="hamburger" />
-  </div>
-</div>
-
-<Styles />
-<div class="navbar">
-  <div class="avatar-container">
+  <div
+    class="avatar-container"
+    on:click|preventDefault={() => setScreen("Profile")}
+  >
     {#if user.avatar && user.avatar.length > 0 && user.avatar !== null}
       <img src={user.avatar} class="last" />
     {:else}
       <img src="assets/avatar.png" alt="*_*" class="avatar" />
     {/if}
   </div>
-  <div class="logo-container">
+  <div
+    class="logo-container"
+    on:click|preventDefault={() => setScreen("Dashboard")}
+  >
     <img src="assets/text.png" alt="*_*" class="logo" />
   </div>
   <Dropdown>
-    <DropdownToggle>
+    <DropdownToggle class="DropdownToggle">
       <!-- <div class="burgir-container"> -->
       <img src="assets/hamburger.png" alt="*_*" class="hamburger" />
       <!-- </div> -->
@@ -65,7 +53,9 @@
         }}>Add follower</DropdownItem
       >
       <DropdownItem divider />
-      <DropdownItem>Profile</DropdownItem>
+      <DropdownItem on:click={() => setScreen("EditProfile")}
+        >Edit Profile</DropdownItem
+      >
       <DropdownItem divider />
       <DropdownItem
         on:click={async () => {
@@ -89,6 +79,7 @@
     background-color: #96cb92;
     grid-template-columns: 15% 70% 15%;
     height: 16vh;
+  }
   .last {
     margin-left: 10px;
     height: 10vh;
@@ -128,7 +119,7 @@
     align-items: center;
   } */
   .hamburger {
-    margin-left: 33%;
+    margin-right: 33%;
     height: 10vh;
     width: 10vh;
   }
@@ -136,5 +127,9 @@
   .line {
     height: 0.3vh;
     background-color: #a2c6c5;
+  }
+
+  .DropdownToggle {
+    background-image: url("assets/hamburger.png");
   }
 </style>
