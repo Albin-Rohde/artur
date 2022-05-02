@@ -6,7 +6,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "firebase-fix": "node firebase-fix.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -31,6 +32,7 @@
     "firebase": "^9.6.6",
     "sirv-cli": "^1.0.0",
     "svelte-atoms": "^0.0.27",
-    "svelte-file-dropzone": "^1.0.0-dev.1"
+    "svelte-file-dropzone": "^1.0.0-dev.1",
+    "sveltestrap": "^5.9.0"
   }
 }
