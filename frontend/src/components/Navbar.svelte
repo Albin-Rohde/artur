@@ -1,38 +1,41 @@
 <script lang="ts">
+  export let setScreen: (_: string) => void;
+  export let user: IUser;
   import {
     Dropdown,
-    DropdownItem,
-    DropdownMenu,
     DropdownToggle,
-    Styles,
+    DropdownMenu,
+    DropdownItem,
   } from "sveltestrap";
   import { User } from "../api-client";
   import type { IUser } from "../api-client/types";
 
   const u = new User();
-  export let setScreen: (_: string) => void;
-
-  export let user: IUser;
 
   (() => {
     console.log("u", user);
   })();
 </script>
 
-<Styles />
 <div class="navbar">
-  <div class="avatar-container">
+  <div
+    class="avatar-container"
+    on:click|preventDefault={() => setScreen("Profile")}
+  >
     {#if user.avatar && user.avatar.length > 0 && user.avatar !== null}
       <img src={user.avatar} class="last" />
     {:else}
       <img src="assets/avatar.png" alt="*_*" class="avatar" />
     {/if}
   </div>
-  <div class="logo-container">
+  <div
+    class="logo-container"
+    on:click|preventDefault={() => setScreen("Dashboard")}
+  >
     <img src="assets/text.png" alt="*_*" class="logo" />
   </div>
   <Dropdown>
-    <DropdownToggle>
+    <DropdownToggle class="DropdownToggle">
       <!-- <div class="burgir-container"> -->
       <img src="assets/hamburger.png" alt="*_*" class="hamburger" />
       <!-- </div> -->
@@ -50,7 +53,9 @@
         }}>Add follower</DropdownItem
       >
       <DropdownItem divider />
-      <DropdownItem>Profile</DropdownItem>
+      <DropdownItem on:click={() => setScreen("EditProfile")}
+        >Edit Profile</DropdownItem
+      >
       <DropdownItem divider />
       <DropdownItem
         on:click={async () => {
@@ -75,7 +80,6 @@
     grid-template-columns: 15% 70% 15%;
     height: 16vh;
   }
-
   .last {
     margin-left: 10px;
     height: 10vh;
@@ -83,7 +87,6 @@
     border-radius: 50%;
   }
   .logo-container {
-    grid-column: 2;
     height: 16vh;
     width: 40%;
     justify-self: center;
@@ -116,7 +119,7 @@
     align-items: center;
   } */
   .hamburger {
-    margin-left: 33%;
+    margin-right: 33%;
     height: 10vh;
     width: 10vh;
   }
@@ -124,5 +127,9 @@
   .line {
     height: 0.3vh;
     background-color: #a2c6c5;
+  }
+
+  .DropdownToggle {
+    background-image: url("assets/hamburger.png");
   }
 </style>

@@ -17,8 +17,10 @@
     align-items: center;
     border-radius: 5px;
     background: #add5a9;
-    width: 200px;
-    height: 30px;
+    width: 9vw;
+    min-width: fit-content;
+    height: 3vh;
+    font-size: 1rem;
   }
   .knapp:hover {
     background: #96cb92;
@@ -33,7 +35,7 @@
     align-items: center;
     border-radius: 5px;
     background: #55595e;
-    width: 200px;
-    height: 30px;
+    width: 8vw;
+    height: 3vh;
   }
 </style>

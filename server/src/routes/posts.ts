@@ -148,7 +148,7 @@ router.get('likes', loginRequired, async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', loginRequired, (req, res) => {
   const { id } = req.params;
 
   return res.sendFile(path.join(__dirname, `../../post/${id}`));

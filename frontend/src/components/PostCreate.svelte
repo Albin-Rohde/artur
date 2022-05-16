@@ -42,11 +42,6 @@
       file_name = f.name;
     }
   };
-
-  let topDiv;
-  let visible = false;
-  let prevOnTop;
-  let closeCallback;
 </script>
 
 <div class="background" on:click|preventDefault={onClick} />
@@ -67,15 +62,17 @@
       placeholder="Content"
     />
     <!-- <Dropzone on:drop={fileChose} /> -->
-    <Dropzone
-      class="drop"
-      fileTitle={file_name}
-      dropOnPage
-      on:drop={fileChose}
-      on:change={fileChose}
-    />
     {#if image}
       <img src={image} alt="hello" class="file" />
+    {:else}
+      <div class="drop">
+        <Dropzone
+          fileTitle={file_name}
+          dropOnPage={true}
+          on:drop={fileChose}
+          on:change={fileChose}
+        />
+      </div>
     {/if}
     <button class="knapp" on:click|preventDefault={() => upload()}
       >{"Create Post"}
@@ -90,9 +87,13 @@
   }
 
   .drop {
+    grid-row: 2/12;
+    grid-column: 2/7;
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 5%;
   }
 
   .background {
@@ -106,7 +107,7 @@
   }
   .container {
     position: fixed;
-    left: 5%;
+    left: 15%;
     width: 90vw;
     height: 90vh;
     bottom: 5%;
@@ -144,7 +145,7 @@
     grid-row: 2/12;
     grid-column: 2/7;
     background-color: white;
-    border-radius: 30px;
+    border-radius: 2%;
   }
   .knapp {
     overflow: visible;

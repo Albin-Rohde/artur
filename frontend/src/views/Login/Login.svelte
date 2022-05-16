@@ -13,8 +13,6 @@
 
 <div class="site-container">
   <div class="login-container">
-    <GoogleButton onClick={() => onGoogleLogin()} />
-    <GithubButton onClick={() => onGithubLogin()} />
     <h2>Login to your account</h2>
     <br />
 
@@ -38,12 +36,13 @@
           password,
         })}
     />
+    <GoogleButton onClick={() => onGoogleLogin()} />
+    <GithubButton onClick={() => onGithubLogin()} />
     <br />
     <div>
-      Don't have an account? <a
-        class="link"
-        on:click={() => setScreen("Register")}>Register</a
-      >
+      <!-- svelte-ignore a11y-missing-attribute -->
+      Don't have an account?
+      <a class="link" on:click={() => setScreen("Register")}>Register</a>
     </div>
   </div>
 </div>
