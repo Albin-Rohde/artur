@@ -151,12 +151,19 @@ userRouter.post('/follower/', loginRequired, async (req, res) => {
 
 userRouter.post('/search', loginRequired, async (req, res) => {
   try {
+    let users: User[] = [];
     const { query } = req.body;
-    let users: User[] = await User.getRepository().find({
-      where: {
-        name: Like(`${query}%`),
-      },
-    });
+    if (!query || query.length === '') {
+      users = await User.find({
+        take: 10,
+      });
+    } else {
+      users = await User.getRepository().find({
+        where: {
+          name: Like(`${query}%`),
+        },
+      });
+    }
 
     users = users.filter(user => user.id !== req.session.userID);
 

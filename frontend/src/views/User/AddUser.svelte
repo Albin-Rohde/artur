@@ -10,6 +10,12 @@
   let users: IUser[] = [];
   const user = new User();
 
+  (async () => {
+    const idk = await user.search("");
+    console.log(idk);
+    users = idk;
+  })();
+
   const onChange = () => {
     console.log(query);
     user.search(query).then((res) => {
@@ -27,6 +33,7 @@
     console.log(u);
     const res = await user.addFollower(u.id);
     console.log(res);
+    window.location.href = "/";
   };
 </script>
 
