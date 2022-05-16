@@ -121,7 +121,6 @@ export class User extends Client {
   }
 
   public async uploadAvatar(file: File): Promise<string> {
-    console.log(file);
     const formData = new FormData();
     formData.append("avatar", file);
     const id = await this.makeRequest<string>({

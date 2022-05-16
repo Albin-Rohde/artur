@@ -8,7 +8,6 @@
   let posts: IPost[] = [];
 
   (async () => {
-    console.log("hello");
     const postClient = new Post();
     posts = await postClient.getFeed(feedType);
     console.log(posts);

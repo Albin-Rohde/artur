@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { IUser } from "../../api-client";
   import { Post, User } from "../../api-client";
-  import type { IPost } from "../../api-client";
+  import type { IPost, IUser } from "../../api-client";
   import PlusButton from "../../components/PlusButton.svelte";
   import Button from "../../components/Button.svelte";
   import PostCreate from "../../components/PostCreate.svelte";
