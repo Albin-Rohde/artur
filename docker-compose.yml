@@ -10,7 +10,7 @@ services:
       - server
       - db
     volumes:
-    - ./frontend:/frontend
+      - ./frontend:/frontend
     links:
       - server
     env_file:
@@ -26,10 +26,12 @@ services:
       DATABASE_URL: postgres://root:abc123@db:5432/db_1
     depends_on:
       - db
+      - redis
     volumes:
       - ./server:/server
     links:
       - db
+      - redis
     env_file:
       - .env
 
@@ -46,3 +48,11 @@ services:
     #   POSTGRES_PASSWORD: "${PG_PASSWORD}"
     #   POSTGRES_DB: "${PG_DB}"
 
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - 6379:6378
+    command: "redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
+    volumes:
+      - ./cache:/data

@@ -11,6 +11,7 @@ import authRouter from './routes/auth';
 import { feedRouter } from './routes/feed';
 import postRouter from './routes/posts';
 import userRouter from './routes/user';
+import { connectRedis } from './util/connect-redis';
 
 dotenv.config();
 
@@ -47,8 +48,10 @@ const server = async () => {
         */
         morgan('dev')
       );
+      const store = connectRedis(session);
       app.use(
         session({
+          store,
           name: 'sid',
           secret: process.env.COOKIE_SECRET as string,
           resave: false,

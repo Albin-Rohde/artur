@@ -10,3 +10,4 @@ yarn-error.log
 /server/package-lock.json
 .env
 .idea*/
+/cache
