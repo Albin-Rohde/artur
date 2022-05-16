@@ -42,11 +42,6 @@
       file_name = f.name;
     }
   };
-
-  let topDiv;
-  let visible = false;
-  let prevOnTop;
-  let closeCallback;
 </script>
 
 <div class="background" on:click|preventDefault={onClick} />
@@ -73,7 +68,7 @@
       <div class="drop">
         <Dropzone
           fileTitle={file_name}
-          dropOnPage
+          dropOnPage={true}
           on:drop={fileChose}
           on:change={fileChose}
         />
@@ -112,7 +107,7 @@
   }
   .container {
     position: fixed;
-    left: 5%;
+    left: 15%;
     width: 90vw;
     height: 90vh;
     bottom: 5%;

@@ -33,7 +33,9 @@
   };
   const upload = async () => {
     console.log(profile_description, profile_name, file[0]);
-    uploadAvatar();
+    if (file) {
+      uploadAvatar();
+    }
     user.bio(profile_description);
   };
 </script>

@@ -33,20 +33,7 @@
     document.body.style.position = "";
     document.body.style.top = "";
   };
-
-  (async () => {
-    console.log("currentUser", currentUser);
-    console.log("hello");
-    const postClient = new Post();
-    posts = await postClient.getFeed("time");
-    console.log(posts);
-  })();
 </script>
-
-<h1>Dethär är din dashboard.</h1>
-<h2>Hej {currentUser.name}.</h2>
-
-<Button onClick={() => onLogout(currentUser)} text="Logout" />
 
 {#if postCreation === "Visible"}
   <PostCreate onClick={() => hidePostCreate()} {currentUser} />
@@ -54,8 +41,8 @@
   <PlusButton onClick={() => showPostCreate()} />
 {/if}
 <div class="feedTypeContainer">
-  <label for="feedType" />
-  <select name="feedTpe" id="feedType" on:change={setFeedType}>
+  <label for="feedType" id="feedTypeLabel">Feed Sorting</label>
+  <select name="feedType" id="feedType" on:change={setFeedType}>
     <option value="time">Time</option>
     <option value="color">Color</option>
     <option value="follower">Follower</option>
@@ -71,5 +58,11 @@
   }
   #feedType {
     grid-column: 10/11;
+  }
+  #feedTypeLabel {
+    justify-self: end;
+    align-self: center;
+    font-size: 1.2rem;
+    grid-column: 9/10;
   }
 </style>
